@@ -12,7 +12,6 @@ class User{
     //로그인 기능
     async login(){
         const client =this.body
-
         try{
             const {phoneNumber, psword} = await UserStorage.getUserInfo(client.phoneNumber);
             if(phoneNumber){
@@ -21,9 +20,8 @@ class User{
                 }
                 return {success:false ,msg:"비밀번호가 틀렸습니다."}; 
             }
+        }catch(err){ //폰번호를 db에 존재하지 않을 경우 err
             return {success:false,msg:"존재하지 않는 아이디 입니다."};
-        }catch(err){
-            return {success:false,err};
         }
     }
     //회원가입 기능

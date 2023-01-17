@@ -11,13 +11,17 @@ class UserStorage{
 
     //phoneNumber로 회원 정보 가져오기
     static async getUserInfo(phoneNumber){
-        try{
-            const userRef =db.collection("users").doc(req.params.phoneNumber);
-            const response = await userRef.get();
-            res.send(response.data());
-        }catch(err){
-            res.send(err);
-        }
+        return new Promise(async(resolve,reject)=>{
+            try{
+                const userRef =db.collection("users").doc(phoneNumber);
+                const response = await userRef.get();
+                resolve(response.data());
+            }catch(err){
+                reject(`${err}`)
+            }
+
+        })
+       
     }
 
      //회원 정보 저장하기
