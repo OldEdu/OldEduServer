@@ -1,6 +1,7 @@
 "use strict"
 
 const User=require("../../models/User");
+const Teacher=require("../../models/Teacher");
 
 const output={
     home : (req,res)=>{
@@ -12,6 +13,9 @@ const output={
     register:(req,res)=>{
         res.render("home/register");
     },
+    profile:(req,res)=>{
+        res.render("home/profile/:phoneNumber")
+    }
 }
 
 const process={
@@ -25,7 +29,12 @@ const process={
         const response=await user.register();
         return res.json(response);
     },
-
+    profile:async (req,res)=>{
+        console.log(res);
+        const teacher= new Teacher(req.body);
+        const response=await teacher.updateProfile();
+        return res.json(response);
+    }
 };
 
 module.exports={

@@ -74,13 +74,13 @@ module.exports =app;
 //     }
 // })
 
-app.delete('/delete/:phoneNumber',async(req,res)=>{
-    try{
-        console.log(res);
-        const response =await db.collection("users").doc(req.params.phoneNumber).delete();
-        res.send(response);
-    }catch(error){
-        res.send(error);
-    }
-})
+// app.delete('/delete/:phoneNumber',async(req,res)=>{
+//     try{
+//         console.log(res);
+//         const response =await db.collection("users").doc(req.params.phoneNumber).delete();
+//         res.send(response);
+//     }catch(error){
+//         res.send(error);
+//     }
+// })
 
