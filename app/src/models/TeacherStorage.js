@@ -3,11 +3,11 @@
 const db=require("../config/db");
 
 class TeacherStorage{
-      //phoneNumber로 교육자 정보 가져오기
-      static async getTeacherInfo(phoneNumber){
+      //userID로 교육자 정보 가져오기
+      static async getTeacherInfo(userID){
         return new Promise(async(resolve,reject)=>{
             try{
-                const teacherRef =  db.collection("teachers").doc(phoneNumber);
+                const teacherRef =  db.collection("teachers").doc(userID);
                 const response = await teacherRef.get();
                 resolve(response.data());
             }catch(err){
@@ -21,17 +21,17 @@ class TeacherStorage{
      static async save(teacherInfo){
         return new Promise(async(resolve,reject)=>{
             try{
-                const phoneNumber=teacherInfo.phoneNumber;
+                const userID=teacherInfo.userID;
                 const TeacherJson={
-                    phoneNumber:teacherInfo.phoneNumber,
-                    nickName:teacherInfo.nickName,
+                    userID:teacherInfo.userID,
+                    userName:teacherInfo.userName,
                     psword:teacherInfo.psword,
-                    isStudent:teacherInfo.isStudent,
+                    userType:teacherInfo.userType,
                     //profileDesc:teacherInfo.profileDesc,
                     //profilePicture:teacherInfo.profilePicture,
                     //하트게시물
                 };
-                await db.collection("teachers").doc(phoneNumber).set(TeacherJson);
+                await db.collection("teachers").doc(userID).set(TeacherJson);
                 resolve({success:true});
             } catch(error){
                 reject(`${error}`)
@@ -44,10 +44,10 @@ class TeacherStorage{
     static async saveProfile(profileInfo){
         return new Promise(async(resolve,reject)=>{
             try{
-                const phoneNumber=profileInfo.phoneNumber;
-                const teacherRef=await db.collection("teachers").doc(phoneNumber)
+                const userID=profileInfo.userID;
+                await db.collection("teachers").doc(userID)
                 .update({
-                    nickName:profileInfo.nickName,
+                    userName:profileInfo.userName,
                     profileDesc:profileInfo.profileDesc,
                     profilePicture:profileInfo.profilePicture,
                     //하트게시물

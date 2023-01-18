@@ -17,14 +17,14 @@ const output={
 
     profile:async(req,res)=>{
         try{
-            var userType = await new User(req.body).getUserType(req.params.phoneNumber);
+            var userType = await new User(req.body).getUserType(req.params.userID);
             if(userType ==="true"){ //학습자인 경우 => 학습자 정보 불러오기
-                const student =new Student(req.params.phoneNumber);
+                const student =new Student(req.params.userID);
                 const response = await student.getStudent();
                 res.send(response);
             }
             else { //교육자 정보 불러오기
-                const teacher = new Teacher(req.params.phoneNumber);
+                const teacher = new Teacher(req.params.userID);
                 const response = await teacher.getTeacher();
                 res.send(response);
             } 
