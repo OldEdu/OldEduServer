@@ -9,6 +9,15 @@ class User{
     constructor(body){
         this.body=body;
     }
+    //phoneNumber로 유저 타입 가져오기
+    async getUserType(phoneNumber){
+        try{
+            const response = await UserStorage.getType(phoneNumber);
+            return response;
+        }catch(err){
+            return {success:false, err};
+        }
+    }
     //로그인 기능
     async login(){
         const client =this.body

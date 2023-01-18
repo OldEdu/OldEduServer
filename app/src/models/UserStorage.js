@@ -10,11 +10,11 @@ User Stroage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 
 class UserStorage{
 
-    //phoneNumber로 회원 정보 가져오기
-    static async getUserInfo(phoneNumber){
+    //user 정보 갖고오기
+    static async getUserInfo(userInfo){
         return new Promise(async(resolve,reject)=>{
             try{
-                const userRef =db.collection("users").doc(phoneNumber);
+                const userRef =db.collection("users").doc(userInfo.phoneNumber);
                 const response = await userRef.get();
                 resolve(response.data());
             }catch(err){
@@ -24,6 +24,22 @@ class UserStorage{
         })
        
     }
+
+    //user 타입(학습자, 교육자) 정보 갖고오기
+    static async getType(phoneNumber){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                const userRef =db.collection("users").doc(phoneNumber);
+                const response = await userRef.get();
+                resolve(response.data().isStudent);
+            }catch(err){
+                reject(`${err}`)
+            }
+
+        })
+       
+    }
+
 
      //회원 정보 저장하기
     static async save(userInfo){
@@ -38,14 +54,12 @@ class UserStorage{
                 isStudent:userInfo.isStudent
             };
             await db.collection("users").doc(phoneNumber).set(userJson);
-            if(isStudent==="true"){
-                console.log(isStudent);
+            if(isStudent==="true"){  //학습자인 경우 회원가입
                 const student= new Student(userInfo);
                 student.register();
             }    
-            else{
-                console.log(isStudent);
-                const teacher= new Teacher(userInfo);
+            else{ //교육자인 경우 회원가입
+                const teacher= new Teacher(userInfo); 
                 teacher.register();
             }
             resolve({success:true});
