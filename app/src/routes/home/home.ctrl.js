@@ -1,7 +1,8 @@
 "use strict"
-
+const db=require("../../config/db");
 const User=require("../../models/User");
 const Teacher=require("../../models/Teacher");
+const Student = require("../../models/Student");
 
 const output={
     home : (req,res)=>{
@@ -13,9 +14,26 @@ const output={
     register:(req,res)=>{
         res.render("home/register");
     },
-    profile:(req,res)=>{
-        res.render("home/profile/:phoneNumber")
+
+    profile:async(req,res)=>{
+        try{
+            var userType = await new User(req.body).getUserType(req.params.phoneNumber);
+            if(userType ==="true"){ //학습자인 경우 => 학습자 정보 불러오기
+                const student =new Student(req.params.phoneNumber);
+                const response = await student.getStudent();
+                res.send(response);
+            }
+            else { //교육자 정보 불러오기
+                const teacher = new Teacher(req.params.phoneNumber);
+                const response = await teacher.getTeacher();
+                res.send(response);
+            } 
+        }catch(error){
+            res.send(error)
+        }
+
     }
+
 }
 
 const process={
@@ -30,7 +48,6 @@ const process={
         return res.json(response);
     },
     profile:async (req,res)=>{
-        console.log(res);
         const teacher= new Teacher(req.body);
         const response=await teacher.updateProfile();
         return res.json(response);
