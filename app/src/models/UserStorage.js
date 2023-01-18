@@ -14,7 +14,7 @@ class UserStorage{
     static async getUserInfo(userInfo){
         return new Promise(async(resolve,reject)=>{
             try{
-                const userRef =db.collection("users").doc(userInfo.phoneNumber);
+                const userRef =db.collection("users").doc(userInfo.userID);
                 const response = await userRef.get();
                 resolve(response.data());
             }catch(err){
@@ -26,12 +26,12 @@ class UserStorage{
     }
 
     //user 타입(학습자, 교육자) 정보 갖고오기
-    static async getType(phoneNumber){
+    static async getType(userID){
         return new Promise(async(resolve,reject)=>{
             try{
-                const userRef =db.collection("users").doc(phoneNumber);
+                const userRef =db.collection("users").doc(userID);
                 const response = await userRef.get();
-                resolve(response.data().isStudent);
+                resolve(response.data().userType);
             }catch(err){
                 reject(`${err}`)
             }
@@ -45,16 +45,16 @@ class UserStorage{
     static async save(userInfo){
         return new Promise(async(resolve,reject)=>{
         try{
-            const isStudent=userInfo.isStudent
-            const phoneNumber=userInfo.phoneNumber;
+            const userType=userInfo.userType
+            const userID=userInfo.userID;
             const userJson={
-                phoneNumber:userInfo.phoneNumber,
-                nickName:userInfo.nickName,
+                userID:userInfo.userID,
+                userName:userInfo.userName,
                 psword:userInfo.psword,
-                isStudent:userInfo.isStudent
+                userType:userInfo.userType
             };
-            await db.collection("users").doc(phoneNumber).set(userJson);
-            if(isStudent==="true"){  //학습자인 경우 회원가입
+            await db.collection("users").doc(userID).set(userJson);
+            if(userType==="true"){  //학습자인 경우 회원가입
                 const student= new Student(userInfo);
                 student.register();
             }    

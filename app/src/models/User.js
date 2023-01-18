@@ -9,10 +9,10 @@ class User{
     constructor(body){
         this.body=body;
     }
-    //phoneNumber로 유저 타입 가져오기
-    async getUserType(phoneNumber){
+    //userID로 유저 타입 가져오기
+    async getUserType(userID){
         try{
-            const response = await UserStorage.getType(phoneNumber);
+            const response = await UserStorage.getType(userID);
             return response;
         }catch(err){
             return {success:false, err};
@@ -20,11 +20,11 @@ class User{
     }
     //로그인 기능
     async login(){
-        const client =this.body
+        const client =this.body;
         try{
-            const {phoneNumber, psword} = await UserStorage.getUserInfo(client.phoneNumber);
-            if(phoneNumber){
-                if(phoneNumber === client.phoneNumber && psword ===client.psword){
+            const {userID, psword} = await UserStorage.getUserInfo(client);
+            if(userID){
+                if(userID === client.userID && psword ===client.psword){
                     return {success :true};
                 }
                 return {success:false ,msg:"비밀번호가 틀렸습니다."}; 
