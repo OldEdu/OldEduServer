@@ -3,11 +3,13 @@
 const db=require("../config/db");
 
 class StudentStroage{
-      //phoneNumber로 회원 정보 가져오기
+
+    
+      //phoneNumber로 학습자 정보 가져오기
       static async getStudentInfo(phoneNumber){
         return new Promise(async(resolve,reject)=>{
             try{
-                const studentRef =db.collection("students").doc(phoneNumber);
+                const studentRef = db.collection("students").doc(phoneNumber);
                 const response = await studentRef.get();
                 resolve(response.data());
             }catch(err){
@@ -18,7 +20,7 @@ class StudentStroage{
        
     }
 
-     //학생 정보 저장하기
+     //학습자 정보 저장하기
     static async save(studentInfo){
         return new Promise(async(resolve,reject)=>{
             try{
