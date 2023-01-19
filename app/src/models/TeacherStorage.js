@@ -29,7 +29,7 @@ class TeacherStorage{
                     userType:teacherInfo.userType,
                     //profileDesc:teacherInfo.profileDesc,
                     //profilePicture:teacherInfo.profilePicture,
-                    //하트게시물
+                    heart:0
                 };
                 await db.collection("teachers").doc(userID).set(TeacherJson);
                 resolve({success:true});
@@ -50,7 +50,7 @@ class TeacherStorage{
                     userName:profileInfo.userName,
                     profileDesc:profileInfo.profileDesc,
                     profilePicture:profileInfo.profilePicture,
-                    //하트게시물
+                    
                 })
                 
                 resolve({success:true});
