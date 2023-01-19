@@ -54,7 +54,7 @@ class UserStorage{
                 userType:userInfo.userType
             };
             await db.collection("users").doc(userID).set(userJson);
-            if(userType==="true"){  //학습자인 경우 회원가입
+            if(userType===true){  //학습자인 경우 회원가입
                 const student= new Student(userInfo);
                 student.register();
             }    
