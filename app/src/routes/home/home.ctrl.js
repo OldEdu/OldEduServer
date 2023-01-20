@@ -36,7 +36,7 @@ const output={
     },
     myPost:async(req,res)=>{
         const posts= new Post(req.params.userID);
-        const response =await posts.readPost();
+        const response =await posts.readMyPostAll();
         res.send(response);
     }
 
