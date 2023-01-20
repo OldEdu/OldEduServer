@@ -19,6 +19,8 @@ class Post{
         }
     }
     //userID로 내가 쓴 게시글 보기 
-    
+
 
 }
+
+module.exports=Post
