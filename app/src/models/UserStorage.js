@@ -4,7 +4,7 @@ const db=require("../config/db");
 const Teacher=require("./Teacher");
 const Student=require("./Student");
 /*
-User Stroage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
+UserStroage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 */
 
 

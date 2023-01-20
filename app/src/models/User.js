@@ -1,6 +1,6 @@
 "use strict";
 /*
-Usesr은 해당 데이터를 가지고 검증 및 조작하는 역할
+User은 유저 데이터를 가지고 검증 및 조작하는 역할
 */
 
 const UserStorage =require("./UserStorage");
