@@ -18,8 +18,9 @@ class Post{
             return {succrss: false,err};
         }
     }
+
     //userID로 내가 쓴 게시글 보기 
-    async readPost(){
+    async readMyPostAll(){
         const client = this.body;
         try{
             const response = await PostStorage.getPosts(client); //client = userID정보 받음
@@ -28,6 +29,8 @@ class Post{
             return {succrss: false,err};
         }
     }
+
+
 
 
 }
