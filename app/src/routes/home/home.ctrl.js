@@ -51,7 +51,13 @@ const process={
         const teacher= new Teacher(req.body);
         const response=await teacher.updateProfile();
         return res.json(response);
+    },
+    createPost:async(req,res)=>{
+        const post = new Post(req.body);
+        const response = await post.createPost();
+        return res.json(response);
     }
+
 };
 
 module.exports={
