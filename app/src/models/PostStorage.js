@@ -17,18 +17,26 @@ class PostStorage{
         })
     }
 
-    // //userID로 내가 쓴 게시글 갖고오기
-    // static async getPosts(userID){
-    //     return new Promise(async(resolve,reject)=>{
-    //         try{
-    //             const postRef = db.collection("eduPost")
-    //             var posts = postRef.orderByChild("userID").equalTo(userID);
-    //             posts.once('value',function(data){
-    //                 console.log(data.val());
-    //             })
-    //         }
-    //     })
-    // }
+    //userID로 내가 쓴 게시글 갖고오기
+    static async getPosts(userID){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                var result=[];
+                const postRef = db.collection("eduPost")
+                var queryRef =await postRef.where("userID","==",userID).get();
+            
+                 if(queryRef.empty){
+                    resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
+                }
+                for(var i=0;i<queryRef.size;i++){
+                    result[i]=queryRef.docs.at(i).data();
+                }
+                resolve({success:true, result});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
 
 
 
