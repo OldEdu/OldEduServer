@@ -18,8 +18,17 @@ class Post{
             return {succrss: false,err};
         }
     }
-
-    //userID로 내가 쓴 게시글 보기 
+    //postID로 게시글 정보 가져오기 기능
+    async readPost(){
+        const client =this.body;
+        try{
+            const response =await PostStorage.getPostInfo(client);//client = postID정보 받음
+            return response;
+        }catch(err){
+            return {succrss: false,err};
+        }
+    }
+    //userID로 내가 쓴 게시글 보기 기능
     async readMyPostAll(){
         const client = this.body;
         try{
@@ -29,10 +38,6 @@ class Post{
             return {succrss: false,err};
         }
     }
-
-
-
-
 }
 
 module.exports=Post
