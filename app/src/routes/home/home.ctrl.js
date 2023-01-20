@@ -38,6 +38,11 @@ const output={
         const posts= new Post(req.params.userID);
         const response =await posts.readMyPostAll();
         res.send(response);
+    },
+    post:async(req,res)=>{
+        const posts=new Post(req.params.postID);
+        const response =await posts.readPost();
+        res.send(response);
     }
 
 }
