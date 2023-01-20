@@ -14,5 +14,5 @@ router.get("/profile/:userID",ctrl.output.profile);
 router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
 router.post("/profile/:userID",ctrl.process.profile);
-router.post("/postCreate",ctrl.process.createPost);
+router.post("/createPost",ctrl.process.createPost);
 module.exports=router;

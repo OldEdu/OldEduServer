@@ -1,7 +1,6 @@
 "use strict";
 
 const db= require("../config/db");
-
 //PostStorage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 class PostStorage{
     
@@ -18,18 +17,18 @@ class PostStorage{
         })
     }
 
-    //userID로 내가 쓴 게시글 갖고오기
-    static async getPosts(userID){
-        return new Promise(async(resolve,reject)=>{
-            try{
-                const postRef = db.collection("eduPost")
-                var posts = postRef.orderByChild("userID").equalTo(userID);
-                posts.once('value',function(data){
-                    console.log(data.val());
-                })
-            }
-        })
-    }
+    // //userID로 내가 쓴 게시글 갖고오기
+    // static async getPosts(userID){
+    //     return new Promise(async(resolve,reject)=>{
+    //         try{
+    //             const postRef = db.collection("eduPost")
+    //             var posts = postRef.orderByChild("userID").equalTo(userID);
+    //             posts.once('value',function(data){
+    //                 console.log(data.val());
+    //             })
+    //         }
+    //     })
+    // }
 
 
 
@@ -47,7 +46,7 @@ class PostStorage{
                     declaration:0,
                     userID:postInfo.userID,
                 }
-                await db.collection("eduPost").push().set(postJson);
+                await db.collection("eduPost").add(postJson);
                 resolve({success:true});
             }catch(err){
                 reject(`${err}`);
@@ -55,3 +54,4 @@ class PostStorage{
         })
     }
 }
+module.exports=PostStorage
