@@ -5,10 +5,10 @@ const db= require("../config/db");
 class PostStorage{
     
     //postID로 게시글 정보 갖고오기 
-    static async getPostInfo(postInfo){
+    static async getPostInfo(postID){
         return new Promise(async(resolve, reject)=>{
             try{
-                const postRef = db.collection("eduPost").doc(postInfo.postID);
+                const postRef = db.collection("eduPost").doc(postID);
                 const response =await postRef.get();
                 resolve(response.data());
             }catch(err){
@@ -54,7 +54,11 @@ class PostStorage{
                     declaration:0,
                     userID:postInfo.userID,
                 }
-                await db.collection("eduPost").add(postJson);
+                const res= await db.collection("eduPost").add(postJson);
+                await db.collection("eduPost").doc(res.id)
+                .update({
+                    postID:res.id, //필드에 postID추가
+                })
                 resolve({success:true});
             }catch(err){
                 reject(`${err}`);
