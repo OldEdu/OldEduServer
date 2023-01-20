@@ -33,6 +33,11 @@ const output={
             res.send(error)
         }
 
+    },
+    myPost:async(req,res)=>{
+        const posts= new Post(req.params.userID);
+        const response =await posts.readPost();
+        res.send(response);
     }
 
 }
