@@ -44,9 +44,15 @@ const output={
         const response =await posts.readPost();
         res.send(response);
     },
-    recentPost:async(req,res)=>{
+    recentPosts:async(req,res)=>{
         const posts=new Post();
         const response = await posts.readPostAll();
+        res.send(response);
+
+    },
+    heartPosts:async(req,res)=>{
+        const posts=new Post();
+        const response = await posts.readHeartPostAll();
         res.send(response);
 
     }
