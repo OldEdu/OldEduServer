@@ -55,7 +55,13 @@ const output={
         const response = await posts.readHeartPostAll();
         res.send(response);
 
-    }
+    },
+    viewsPosts:async(req,res)=>{
+        const posts=new Post();
+        const response = await posts.readViewPostAll();
+        res.send(response);
+
+    },
 
 
 }
