@@ -38,6 +38,26 @@ class Post{
             return {succrss: false,err};
         }
     }
+    //하트가 많은 게시글 
+    async readHeartPostAll(){
+        
+    }
+
+    //조회수 가장 높은 게시글 
+    async readViewPostAll(){
+
+    }
+    
+    //최근 게시글
+    async readPostAll(){
+        const client = this.body;
+        try{
+            const response = await PostStorage.getRecentPosts();
+            return response;
+        }catch(err){
+            return {success:false,err};
+        }
+    } 
 }
 
 module.exports=Post
