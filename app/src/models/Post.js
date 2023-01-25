@@ -40,7 +40,12 @@ class Post{
     }
     //하트가 많은 게시글 
     async readHeartPostAll(){
-        
+        try{ 
+            const response = await PostStorage.getHeartPosts();
+            return response;
+        }catch(err){
+            return {succrss: false,err};
+        }
     }
 
     //조회수 가장 높은 게시글 
@@ -50,7 +55,6 @@ class Post{
     
     //최근 게시글
     async readPostAll(){
-        const client = this.body;
         try{
             const response = await PostStorage.getRecentPosts();
             return response;
