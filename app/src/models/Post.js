@@ -49,8 +49,13 @@ class Post{
     }
 
     //조회수 가장 높은 게시글 
-    async readViewPostAll(){
-
+    async readViewsPostAll(){
+        try{
+            const response = await PostStorage.getViewsPosts();
+            return response;
+        }catch(err){
+            return {success:false,err};
+        }
     }
     
     //최근 게시글
