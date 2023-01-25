@@ -43,7 +43,14 @@ const output={
         const posts=new Post(req.params.postID);
         const response =await posts.readPost();
         res.send(response);
+    },
+    recentPost:async(req,res)=>{
+        const posts=new Post();
+        const response = await posts.readPostAll();
+        res.send(response);
+
     }
+
 
 }
 
