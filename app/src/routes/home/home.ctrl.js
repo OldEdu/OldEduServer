@@ -3,6 +3,8 @@ const db=require("../../config/db");
 const User=require("../../models/User");
 const Teacher=require("../../models/Teacher");
 const Student = require("../../models/Student");
+const Scrap = require("../../models/Scrap");
+const { response } = require("express");
 
 const output={
     home : (req,res)=>{
@@ -32,7 +34,13 @@ const output={
             res.send(error)
         }
 
-    }
+    },
+
+    // scrap:async(req,res)=>{
+    //     const scrap = new Scrap(req.params.scrapID);
+    //     const response = await scrap.getScrapList(scrap.userID);
+    //     res.send(response);
+    // }
 
 }
 
@@ -51,6 +59,18 @@ const process={
         const teacher= new Teacher(req.body);
         const response=await teacher.updateProfile();
         return res.json(response);
+    },
+    scrap:async(req,res)=>{        
+        const userType = await new Scrap(req.body).getUserType(req.params.userID);
+        if(userType === true) {
+            const scrap = new Scrap(req.body);
+            const response = await scrap.addScrap();
+            return res.json(response);
+        }
+        else{
+            const response = {success:false , msg: "You are not Sutudent."};
+            return res.json(response);
+        }
     }
 };
 
