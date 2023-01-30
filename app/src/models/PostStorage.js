@@ -70,8 +70,8 @@ class PostStorage{
         return new Promise(async(resolve, reject)=>{
             try{
                 var result=[];
-                const postRef = db.collection("eduPost")
-                var queryRef =await postRef.orderBy('in_date','desc').get();
+                const postRef = db.collection("eduPost");
+                var queryRef =await postRef.orderBy('in_date','desc').get();//내림차순
                 
                 if(queryRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
@@ -90,8 +90,8 @@ class PostStorage{
         return new Promise(async(resolve, reject)=>{
             try{
                 var result=[];
-                const postRef = db.collection("eduPost")
-                var queryRef =await postRef.orderBy('heart','desc').get();
+                const postRef = db.collection("eduPost");
+                var queryRef =await postRef.orderBy('heart','desc').get(); //내림차순
                 
                 if(queryRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
@@ -110,14 +110,36 @@ class PostStorage{
         return new Promise(async(resolve, reject)=>{
             try{
                 var result=[];
-                const postRef = db.collection("eduPost")
-                var queryRef =await postRef.orderBy('views','desc').get();
-                
+                const postRef = db.collection("eduPost");
+                var queryRef =await postRef.orderBy('views','desc').get(); // 내림차순
                 if(queryRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
                 for(var i=0;i<queryRef.size;i++){
                     result[i]=queryRef.docs.at(i).data();
+                }
+                resolve({success:true, result});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
+    //게시글 검색 
+    static async getSearchPosts(keyword){ //검색 키워드가 매게변수이다.
+        return new Promise(async(resolve,reject)=>{
+            try{
+                console.log(keyword)
+                var result=[];
+                const postRef =  db.collection("eduPost");
+                var searchRef = await postRef.orderBy("title").startAt(keyword).endAt(keyword+'\uf8ff').get();       
+    
+                if(searchRef.empty){
+                    resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
+                }
+                
+                //searchRef= searchRef.orderBy("in_date",'desc').get();//최신순
+                for(var i=0;i<searchRef.size;i++){
+                    result[i]=searchRef.docs.at(i).data();
                 }
                 resolve({success:true, result});
             }catch(err){
