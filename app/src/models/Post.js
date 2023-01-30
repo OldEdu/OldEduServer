@@ -67,6 +67,15 @@ class Post{
             return {success:false,err};
         }
     } 
+    //게시글 검색
+    async readSearchPostAll(keyword){
+        try{
+            const response = await PostStorage.getSearchPosts(keyword);
+            return response;
+        }catch(err){
+            return {success:false,err};
+        }
+    }
 }
 
 module.exports=Post
