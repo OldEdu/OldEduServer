@@ -58,7 +58,13 @@ const output={
     },
     viewsPosts:async(req,res)=>{
         const posts=new Post();
-        const response = await posts.readViewPostAll();
+        const response = await posts.readViewsPostAll();
+        res.send(response);
+
+    },
+    searchPosts:async(req,res)=>{
+        const posts=new Post();
+        const response = await posts.readSearchPostAll(req.query.keyword);
         res.send(response);
 
     },
