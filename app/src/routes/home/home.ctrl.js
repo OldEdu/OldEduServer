@@ -62,9 +62,15 @@ const output={
         res.send(response);
 
     },
-    searchPosts:async(req,res)=>{
+    searchViewsPosts:async(req,res)=>{
         const posts=new Post();
-        const response = await posts.readSearchPostAll(req.query.keyword);
+        const response = await posts.readSearchViewsPostAll(req.query.keyword);
+        res.send(response);
+
+    },
+    searchHeartPosts:async(req,res)=>{
+        const posts=new Post();
+        const response = await posts.readSearchHeartPostAll(req.query.keyword);
         res.send(response);
 
     },
