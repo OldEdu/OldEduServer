@@ -71,6 +71,7 @@ class PostStorage{
         return new Promise(async(resolve, reject)=>{
             try{
                 var result=[];
+                var residx=0;
                 const postRef = db.collection("eduPost");
                 var queryRef =await postRef.orderBy('in_date','desc').get();//내림차순
                 
@@ -78,9 +79,9 @@ class PostStorage{
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
 
-                for(var i=0;i<queryRef.size;i++){
-                    result[i]=queryRef.docs.at(i).data();
-                }
+                queryRef.forEach(doc=>{
+                    result[residx++]=doc.data();
+                })
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
@@ -92,15 +93,16 @@ class PostStorage{
         return new Promise(async(resolve, reject)=>{
             try{
                 var result=[];
+                var residx=0;
                 const postRef = db.collection("eduPost");
                 var queryRef =await postRef.orderBy('heart','desc').get(); //내림차순
                 
                 if(queryRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
-                for(var i=0;i<queryRef.size;i++){
-                    result[i]=queryRef.docs.at(i).data();
-                }
+                queryRef.forEach(doc=>{
+                    result[residx++]=doc.data();
+                })
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
@@ -112,14 +114,15 @@ class PostStorage{
         return new Promise(async(resolve, reject)=>{
             try{
                 var result=[];
+                var residx=0;
                 const postRef = db.collection("eduPost");
                 var queryRef =await postRef.orderBy('views','desc').get(); // 내림차순
                 if(queryRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
-                for(var i=0;i<queryRef.size;i++){
-                    result[i]=queryRef.docs.at(i).data();
-                }
+                queryRef.forEach(doc=>{
+                    result[residx++]=doc.data();
+                })
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
