@@ -76,6 +76,7 @@ class PostStorage{
                 if(queryRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
+
                 for(var i=0;i<queryRef.size;i++){
                     result[i]=queryRef.docs.at(i).data();
                 }
@@ -124,24 +125,38 @@ class PostStorage{
             }
         })
     }
+    
     //게시글 검색 
     static async getSearchPosts(keyword){ //검색 키워드가 매게변수이다.
         return new Promise(async(resolve,reject)=>{
             try{
-                console.log(keyword)
                 var result=[];
+                var residx=0;
                 const postRef =  db.collection("eduPost");
-                var searchRef = await postRef.orderBy("title").startAt(keyword).endAt(keyword+'\uf8ff').get();       
+                var searchRef= await postRef.orderBy("in_date",'desc').get();//최신순
+                //var searchRef = await postRef.orderBy("title").startAt(keyword).endAt(keyword+'\uf8ff').get();       
     
                 if(searchRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
-                
-                //searchRef= searchRef.orderBy("in_date",'desc').get();//최신순
+
                 for(var i=0;i<searchRef.size;i++){
-                    result[i]=searchRef.docs.at(i).data();
+                    var title = searchRef.docs.at(i).data().title;
+                    if(isAlphaOrParen(keyword)){ //검색 키워드가 영어인 경우
+                        keyword=keyword.toLowerCase(); //검색키워드와 db의 타이틀 모두 소문자로 변환 후 검색
+                        title=title.toLowerCase();
+                        if(keyword.includes(title))
+                            result[residx++]=searchRef.docs.at(i).data();
+                    }
+                    else{//검색 키워드가 한글인 경우
+                        if(keyword.includes(title))
+                            result[residx++]=searchRef.docs.at(i).data();
+                    }
                 }
-                resolve({success:true, result});
+                if(!result.length)
+                    resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시글이 없습니다.
+                else
+                    resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
             }
@@ -149,4 +164,8 @@ class PostStorage{
     }
 
 }
+//알파벳 판별을 위한 함수
+function isAlphaOrParen(str) {
+    return /^[a-zA-Z()]+$/.test(str);
+  }
 module.exports=PostStorage
