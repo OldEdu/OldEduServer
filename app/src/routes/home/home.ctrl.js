@@ -74,6 +74,12 @@ const output={
         res.send(response);
 
     },
+    searchViewsPosts:async(req,res)=>{
+        const posts=new Post();
+        const response = await posts.readSearchViewsPostAll(req.query.keyword);
+        res.send(response);
+
+    },
 
 
 }

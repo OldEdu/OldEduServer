@@ -16,7 +16,7 @@ router.get("/heartPosts",ctrl.output.heartPosts);
 router.get("/viewsPosts",ctrl.output.viewsPosts);
 router.get("/searchPosts",ctrl.output.searchPosts);
 router.get("/searchHeartPosts",ctrl.output.searchHeartPosts);
-
+router.get("/searchViewsPosts",ctrl.output.searchViewsPosts);
 
 router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
