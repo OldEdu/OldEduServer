@@ -67,10 +67,19 @@ class Post{
             return {success:false,err};
         }
     } 
-    //게시글 검색
-    async readSearchPostAll(keyword){
+    //게시글 검색(최신순)
+    async readSearchViewsPostAll(keyword){
         try{
-            const response = await PostStorage.getSearchPosts(keyword);
+            const response = await PostStorage.getSearchViewsPosts(keyword);
+            return response;
+        }catch(err){
+            return {success:false,err};
+        }
+    }
+      //게시글 검색(하트)
+      async readSearchHeartPostAll(keyword){
+        try{
+            const response = await PostStorage.getSearchHeartPosts(keyword);
             return response;
         }catch(err){
             return {success:false,err};
