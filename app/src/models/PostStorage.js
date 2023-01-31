@@ -22,15 +22,16 @@ class PostStorage{
         return new Promise(async(resolve,reject)=>{
             try{
                 var result=[];
+                var residx=0;
                 const postRef = db.collection("eduPost")
                 var queryRef =await postRef.where("userID","==",userID).get();
             
                  if(queryRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
-                for(var i=0;i<queryRef.size;i++){
-                    result[i]=queryRef.docs.at(i).data();
-                }
+                queryRef.forEach(doc=>{
+                    result[residx++]=doc.data();
+                })
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
