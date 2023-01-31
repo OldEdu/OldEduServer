@@ -164,7 +164,7 @@ class PostStorage{
                 for(var i=searchRef.size-1;i>=0;i--){
                     result[residx++]=searchRef.docs.at(i).data();
                 }
-                result.sort(function(a,b){ //내림차순 정렬 
+                result.sort(function(a,b){ //하트 내림차순 정렬 
                     return b.heart-a.heart;
                 })
                 
@@ -176,7 +176,31 @@ class PostStorage{
         })
     }
     //게시글 검색 (조회수 정렬순) 
-
+    static async getSearchViewsPosts(keyword){ //검색 키워드가 매게변수이다.
+        return new Promise(async(resolve,reject)=>{
+            try{
+                var result=[];
+                var residx=0;
+                const postRef =  db.collection("eduPost");
+                var searchRef= await postRef.orderBy("title").startAt(keyword).endAt(keyword+'\uf8ff').get(); //검색
+    
+                if(searchRef.empty){
+                    resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시글이 없습니다.
+                }
+                for(var i=searchRef.size-1;i>=0;i--){
+                    result[residx++]=searchRef.docs.at(i).data();
+                }
+                result.sort(function(a,b){ //조회수 내림차순 정렬 
+                    return b.views-a.views;
+                })
+                
+                resolve({success:true, result});
+            
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
 
 
 }
