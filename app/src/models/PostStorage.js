@@ -126,8 +126,8 @@ class PostStorage{
         })
     }
     
-    //게시글 검색 
-    static async getSearchPosts(keyword){ //검색 키워드가 매게변수이다.
+    //게시글 검색 (최신 정렬순)
+    static async getSearchViewsPosts(keyword){ //검색 키워드가 매게변수이다.
         return new Promise(async(resolve,reject)=>{
             try{
                 var result=[];
@@ -145,11 +145,48 @@ class PostStorage{
                     if(isAlphaOrParen(keyword)){ //검색 키워드가 영어인 경우
                         keyword=keyword.toLowerCase(); //검색키워드와 db의 타이틀 모두 소문자로 변환 후 검색
                         title=title.toLowerCase();
-                        if(keyword.includes(title))
+                        if(title.includes(keyword))
                             result[residx++]=searchRef.docs.at(i).data();
                     }
                     else{//검색 키워드가 한글인 경우
-                        if(keyword.includes(title))
+                        if(title.includes(keyword)){
+                            result[residx++]=searchRef.docs.at(i).data();
+                        }
+                            
+                    }
+                }
+                if(!result.length)
+                    resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시글이 없습니다.
+                else
+                    resolve({success:true, result});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
+    //게시글 검색 (하트 정렬순)
+    static async getSearchHeartPosts(keyword){ //검색 키워드가 매게변수이다.
+        return new Promise(async(resolve,reject)=>{
+            try{
+                var result=[];
+                var residx=0;
+                const postRef =  db.collection("eduPost");
+                var searchRef= await postRef.orderBy("heart",'desc').get();//하트순
+    
+                if(searchRef.empty){
+                    resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
+                }
+
+                for(var i=0;i<searchRef.size;i++){
+                    var title = searchRef.docs.at(i).data().title;
+                    if(isAlphaOrParen(keyword)){ //검색 키워드가 영어인 경우
+                        keyword=keyword.toLowerCase(); //검색키워드와 db의 타이틀 모두 소문자로 변환 후 검색
+                        title=title.toLowerCase();
+                        if(title.includes(keyword))
+                            result[residx++]=searchRef.docs.at(i).data();
+                    }
+                    else{//검색 키워드가 한글인 경우
+                        if(title.includes(keyword))
                             result[residx++]=searchRef.docs.at(i).data();
                     }
                 }
@@ -162,8 +199,15 @@ class PostStorage{
             }
         })
     }
+    //게시글 검색 (조회수 정렬순) 
+
+
 
 }
+
+
+
+
 //알파벳 판별을 위한 함수
 function isAlphaOrParen(str) {
     return /^[a-zA-Z()]+$/.test(str);
