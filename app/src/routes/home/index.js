@@ -14,7 +14,7 @@ router.get("/post/:postID",ctrl.output.post);
 router.get("/recentPosts",ctrl.output.recentPosts);
 router.get("/heartPosts",ctrl.output.heartPosts);
 router.get("/viewsPosts",ctrl.output.viewsPosts);
-router.get("/searchViewsPosts",ctrl.output.searchViewsPosts);
+router.get("/searchPosts",ctrl.output.searchPosts);
 router.get("/searchHeartPosts",ctrl.output.searchHeartPosts);
 
 

@@ -62,9 +62,9 @@ const output={
         res.send(response);
 
     },
-    searchViewsPosts:async(req,res)=>{
+    searchPosts:async(req,res)=>{
         const posts=new Post();
-        const response = await posts.readSearchViewsPostAll(req.query.keyword);
+        const response = await posts.readSearchPostAll(req.query.keyword);
         res.send(response);
 
     },
