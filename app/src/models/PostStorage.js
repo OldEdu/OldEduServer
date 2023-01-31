@@ -133,32 +133,17 @@ class PostStorage{
                 var result=[];
                 var residx=0;
                 const postRef =  db.collection("eduPost");
-                var searchRef= await postRef.orderBy("in_date",'desc').get();//최신순
+                var searchRef= await postRef.orderBy("title").startAt(keyword).endAt(keyword+'\uf8ff').get();
                 //var searchRef = await postRef.orderBy("title").startAt(keyword).endAt(keyword+'\uf8ff').get();       
     
                 if(searchRef.empty){
-                    resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
+                    resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시물이 없습니다.
                 }
 
-                for(var i=0;i<searchRef.size;i++){
-                    var title = searchRef.docs.at(i).data().title;
-                    if(isAlphaOrParen(keyword)){ //검색 키워드가 영어인 경우
-                        keyword=keyword.toLowerCase(); //검색키워드와 db의 타이틀 모두 소문자로 변환 후 검색
-                        title=title.toLowerCase();
-                        if(title.includes(keyword))
-                            result[residx++]=searchRef.docs.at(i).data();
-                    }
-                    else{//검색 키워드가 한글인 경우
-                        if(title.includes(keyword)){
-                            result[residx++]=searchRef.docs.at(i).data();
-                        }
-                            
-                    }
+                for(var i=searchRef.size-1;i>=0;i--){
+                    result[residx++]=searchRef.docs.at(i).data();
                 }
-                if(!result.length)
-                    resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시글이 없습니다.
-                else
-                    resolve({success:true, result});
+                resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
             }
@@ -171,29 +156,20 @@ class PostStorage{
                 var result=[];
                 var residx=0;
                 const postRef =  db.collection("eduPost");
-                var searchRef= await postRef.orderBy("heart",'desc').get();//하트순
+                var searchRef= await postRef.orderBy("title").startAt(keyword).endAt(keyword+'\uf8ff').get(); //검색
     
                 if(searchRef.empty){
-                    resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
-                }
-
-                for(var i=0;i<searchRef.size;i++){
-                    var title = searchRef.docs.at(i).data().title;
-                    if(isAlphaOrParen(keyword)){ //검색 키워드가 영어인 경우
-                        keyword=keyword.toLowerCase(); //검색키워드와 db의 타이틀 모두 소문자로 변환 후 검색
-                        title=title.toLowerCase();
-                        if(title.includes(keyword))
-                            result[residx++]=searchRef.docs.at(i).data();
-                    }
-                    else{//검색 키워드가 한글인 경우
-                        if(title.includes(keyword))
-                            result[residx++]=searchRef.docs.at(i).data();
-                    }
-                }
-                if(!result.length)
                     resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시글이 없습니다.
-                else
-                    resolve({success:true, result});
+                }
+                for(var i=searchRef.size-1;i>=0;i--){
+                    result[residx++]=searchRef.docs.at(i).data();
+                }
+                result.sort(function(a,b){ //내림차순 정렬 
+                    return b.heart-a.heart;
+                })
+                
+                resolve({success:true, result});
+            
             }catch(err){
                 reject(`${err}`);
             }
