@@ -45,7 +45,9 @@ class PostStorage{
     static async savePost(postInfo){
         return new Promise(async(resolve, reject)=>{
             try{
-                const in_date=new Date().toLocaleString(); //게시글 등록 시 날짜 및 시간
+                const TIME_ZONE = 3240 * 10000; //한국과 시차 맞추기
+                const date = new Date();
+                const in_date=new Date(+date + TIME_ZONE).toISOString().replace('T', ' ').replace(/\..*/, ''); //게시글 등록 시 날짜 및 시간
                 const postJson={                    //게시글 정보 
                     title:postInfo.title,
                     category:postInfo.category,
@@ -109,8 +111,13 @@ class PostStorage{
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
 
-                queryRef.forEach(doc=>{
+                queryRef.forEach(doc=>{     //데이터 갖고오기
                     result[residx++]=doc.data();
+                })
+                result.sort(function(a,b){  //최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
                 })
                 resolve({success:true, result});
             }catch(err){
@@ -130,8 +137,13 @@ class PostStorage{
                 if(queryRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
-                queryRef.forEach(doc=>{
+                queryRef.forEach(doc=>{    //데이터 갖고오기
                     result[residx++]=doc.data();
+                })
+                result.sort(function(a,b){ //최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
                 })
                 resolve({success:true, result});
             }catch(err){
@@ -150,9 +162,15 @@ class PostStorage{
                 if(queryRef.empty){
                     resolve({success:true , msg: "No posts have been created."}); //작성된 게시글이 없습니다.
                 }
-                queryRef.forEach(doc=>{
+                queryRef.forEach(doc=>{//데이터 갖고오기
                     result[residx++]=doc.data();
                 })
+                result.sort(function(a,b){ //최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
+                })
+
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
@@ -174,10 +192,14 @@ class PostStorage{
                     resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시물이 없습니다.
                 }
              
-                searchRef.docs.slice().reverse().forEach(doc=>{          //검색된 게시글 최신순정렬
+                searchRef.forEach(doc=>{  //데이터 갖고오기   
                     result[residx++]=doc.data();
                 })
-
+                result.sort(function(a,b){//최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
+                })
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
@@ -196,10 +218,14 @@ class PostStorage{
                 if(searchRef.empty){
                     resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시글이 없습니다.
                 }
-                searchRef.docs.slice().reverse().forEach(doc=>{          //검색된 게시글 최신순정렬
+                searchRef.forEach(doc=>{ //데이터 갖고오기
                     result[residx++]=doc.data();
                 })
-
+                result.sort(function(a,b){//최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
+                })
                 result.sort(function(a,b){ //하트 내림차순 정렬 
                     return b.heart-a.heart;
                 })
@@ -223,10 +249,14 @@ class PostStorage{
                 if(searchRef.empty){
                     resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시글이 없습니다.
                 }
-                searchRef.docs.slice().reverse().forEach(doc=>{          //검색된 게시글 최신순정렬
+                searchRef.forEach(doc=>{         //데이터 갖고오기
                     result[residx++]=doc.data();
                 })
-
+                result.sort(function(a,b){//최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
+                })
                 result.sort(function(a,b){ //조회수 내림차순 정렬 
                     return b.views-a.views;
                 })
