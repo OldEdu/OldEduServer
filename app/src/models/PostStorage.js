@@ -42,7 +42,7 @@ class PostStorage{
 
 
     //게시글 등록하기
-    static async save(postInfo){
+    static async savePost(postInfo){
         return new Promise(async(resolve, reject)=>{
             try{
                 const in_date=new Date().toLocaleString(); //게시글 등록 시 날짜 및 시간
@@ -66,6 +66,10 @@ class PostStorage{
             }
         })
     }
+    //게시글 수정하기
+    //게시글 삭제하기
+
+
     //최신 게시글 불러오기
     static async getRecentPosts(){
         return new Promise(async(resolve, reject)=>{
