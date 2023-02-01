@@ -131,7 +131,7 @@ class PostStorage{
     }
     
     //게시글 검색 (최신 정렬순)
-    static async getSearchViewsPosts(keyword){ //검색 키워드가 매게변수이다.
+    static async getSearchRecentPosts(keyword){ //검색 키워드가 매게변수이다.
         return new Promise(async(resolve,reject)=>{
             try{
                 var result=[];
@@ -143,10 +143,11 @@ class PostStorage{
                 if(searchRef.empty){
                     resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시물이 없습니다.
                 }
+             
+                searchRef.docs.slice().reverse().forEach(doc=>{          //검색된 게시글 최신순정렬
+                    result[residx++]=doc.data();
+                })
 
-                for(var i=searchRef.size-1;i>=0;i--){
-                    result[residx++]=searchRef.docs.at(i).data();
-                }
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
@@ -165,9 +166,10 @@ class PostStorage{
                 if(searchRef.empty){
                     resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시글이 없습니다.
                 }
-                for(var i=searchRef.size-1;i>=0;i--){
-                    result[residx++]=searchRef.docs.at(i).data();
-                }
+                searchRef.docs.slice().reverse().forEach(doc=>{          //검색된 게시글 최신순정렬
+                    result[residx++]=doc.data();
+                })
+
                 result.sort(function(a,b){ //하트 내림차순 정렬 
                     return b.heart-a.heart;
                 })
@@ -191,9 +193,10 @@ class PostStorage{
                 if(searchRef.empty){
                     resolve({success:true , msg: "검색된 게시물이 없습니다."}); //검색된 게시글이 없습니다.
                 }
-                for(var i=searchRef.size-1;i>=0;i--){
-                    result[residx++]=searchRef.docs.at(i).data();
-                }
+                searchRef.docs.slice().reverse().forEach(doc=>{          //검색된 게시글 최신순정렬
+                    result[residx++]=doc.data();
+                })
+
                 result.sort(function(a,b){ //조회수 내림차순 정렬 
                     return b.views-a.views;
                 })
@@ -208,9 +211,6 @@ class PostStorage{
 
 
 }
-
-
-
 
 //알파벳 판별을 위한 함수
 function isAlphaOrParen(str) {

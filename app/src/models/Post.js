@@ -68,9 +68,9 @@ class Post{
         }
     } 
     //게시글 검색(최신순)
-    async readSearchPostAll(keyword){
+    async readSearchRecentPostAll(keyword){
         try{
-            const response = await PostStorage.getSearchViewsPosts(keyword);
+            const response = await PostStorage.getSearchRecentPosts(keyword);
             return response;
         }catch(err){
             return {success:false,err};
