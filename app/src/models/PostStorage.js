@@ -1,7 +1,6 @@
 "use strict";
 
 const db= require("../config/db");
-const { post } = require("../routes/home");
 //PostStorage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 class PostStorage{
     
@@ -85,7 +84,17 @@ class PostStorage{
     }
 
     //게시글 삭제하기
-
+    //postID를 받아 게시글 삭제하기
+    static async deletePost(postId){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                await db.collection("eduPost").doc(postId).delete();
+                resolve({success:true});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
 
     //최신 게시글 불러오기
     static async getRecentPosts(){

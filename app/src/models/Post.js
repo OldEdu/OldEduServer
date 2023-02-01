@@ -1,4 +1,5 @@
 "use strict";
+const { deletePost } = require("./PostStorage");
 //Post은 게시글 데이터를 가고 검증 및  조작하는 역할
 
 const PostStorage =require("./PostStorage");
@@ -29,6 +30,15 @@ class Post{
             return {success:false,err};
         }
     }
+    async deletePost(postID){
+        try{
+            const response= await PostStorage.deletePost(postID);
+            return response;
+        }catch(err){
+            return {success:false,err};
+        }
+    }
+
     //postID로 게시글 정보 가져오기 기능
     async readPost(){
         const client =this.body;
