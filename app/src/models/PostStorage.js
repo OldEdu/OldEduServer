@@ -32,6 +32,14 @@ class PostStorage{
                 queryRef.forEach(doc=>{
                     result[residx++]=doc.data();
                 })
+
+                result.sort(function(a,b){//최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
+                })
+
+
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
@@ -268,8 +276,7 @@ class PostStorage{
             }
         })
     }
-
-
+    
 }
 
 //알파벳 판별을 위한 함수
