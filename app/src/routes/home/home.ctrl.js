@@ -104,6 +104,11 @@ const process={
         const post = new Post(req.body);
         const response = await post.createPost();
         return res.json(response);
+    },
+    updatePost:async(req,res)=>{
+        const post=new Post(req.body);
+        const response = await post.updatePost();
+        return res.json(response);
     }
 
 };
