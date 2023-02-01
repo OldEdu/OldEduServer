@@ -1,6 +1,7 @@
 "use strict";
 
 const db= require("../config/db");
+const { post } = require("../routes/home");
 //PostStorage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 class PostStorage{
     
@@ -46,19 +47,19 @@ class PostStorage{
         return new Promise(async(resolve, reject)=>{
             try{
                 const in_date=new Date().toLocaleString(); //게시글 등록 시 날짜 및 시간
-                const postJson={
+                const postJson={                    //게시글 정보 
                     title:postInfo.title,
                     category:postInfo.category,
                     in_date:in_date,
-                    views:0,
+                    views:0,            //조회수,하트,신고수 0회로 초기 셋팅
                     heart:0,
                     declaration:0,
                     userID:postInfo.userID,
                 }
-                const res= await db.collection("eduPost").add(postJson);
-                await db.collection("eduPost").doc(res.id)
+                const postRef= await db.collection("eduPost").add(postJson);
+                await db.collection("eduPost").doc(postRef.id)
                 .update({
-                    postID:res.id, //필드에 postID추가
+                    postID:postRef.id, //필드에 postID추가
                 })
                 resolve({success:true});
             }catch(err){
@@ -66,7 +67,23 @@ class PostStorage{
             }
         })
     }
-    //게시글 수정하기
+    //postID를 받아 게시글 수정하기(title,category)
+    static async updatePost(postInfo){
+        return new Promise(async(resolve,reject)=>{
+            try{    
+                //title,category만 수정가능
+                const postRef=await db.collection("eduPost").doc(postInfo.postID)
+                .update({
+                    title:postInfo.title,
+                    category:postInfo.category,
+                })
+                resolve({success:true});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
+
     //게시글 삭제하기
 
 
