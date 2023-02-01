@@ -22,7 +22,7 @@ class ScrapStorage {
     static async getUserScrap(userID) {
         return new Promise(async(resolve,reject) => {
             try{
-                var result=[];
+                var result = [];
                 const scrapRef = db.collection("scrap");
                 var queryRef =await scrapRef.where("userID","==",userID).get();
             
