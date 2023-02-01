@@ -18,6 +18,17 @@ class Post{
             return {succrss: false,err};
         }
     }
+
+    //게시글 수정하기 기능
+    async updatePost(){
+        const client =this.body;
+        try{
+            const response = await PostStorage.updatePost(client);
+            return response
+        }catch(err){
+            return {success:false,err};
+        }
+    }
     //postID로 게시글 정보 가져오기 기능
     async readPost(){
         const client =this.body;
