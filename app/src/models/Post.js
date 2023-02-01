@@ -12,7 +12,7 @@ class Post{
     async createPost(){
         const client = this.body;
         try{
-            const response = await PostStorage.save(client);
+            const response = await PostStorage.savePost(client);
             return response;
         }catch(err){
             return {succrss: false,err};
