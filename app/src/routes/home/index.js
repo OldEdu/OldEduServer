@@ -24,4 +24,7 @@ router.post("/profile/:userID",ctrl.process.profile);
 router.post("/createPost",ctrl.process.createPost);
 router.post("/updatePost",ctrl.process.updatePost);
 
+router.delete("/deletePost/:postID",ctrl.output.deletePost);
+
+
 module.exports=router;

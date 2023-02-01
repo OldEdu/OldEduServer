@@ -40,46 +40,52 @@ const output={
         res.send(response);
     },
     post:async(req,res)=>{
-        const posts=new Post(req.params.postID);
-        const response =await posts.readPost();
+        const post=new Post(req.params.postID);
+        const response =await post.readPost();
+        res.send(response);
+    },
+    deletePost:async(req,res)=>{
+        const post=new Post();
+        const response = await post.deletePost(req.params.postID);
         res.send(response);
     },
     recentPosts:async(req,res)=>{
-        const posts=new Post();
-        const response = await posts.readPostAll();
+        const post=new Post();
+        const response = await post.readPostAll();
         res.send(response);
 
     },
     heartPosts:async(req,res)=>{
-        const posts=new Post();
-        const response = await posts.readHeartPostAll();
+        const post=new Post();
+        const response = await post.readHeartPostAll();
         res.send(response);
 
     },
     viewsPosts:async(req,res)=>{
-        const posts=new Post();
-        const response = await posts.readViewsPostAll();
+        const post=new Post();
+        const response = await post.readViewsPostAll();
         res.send(response);
 
     },
     searchRecentPosts:async(req,res)=>{
-        const posts=new Post();
-        const response = await posts.readSearchRecentPostAll(req.query.keyword);
+        const post=new Post();
+        const response = await post.readSearchRecentPostAll(req.query.keyword);
         res.send(response);
 
     },
     searchHeartPosts:async(req,res)=>{
-        const posts=new Post();
-        const response = await posts.readSearchHeartPostAll(req.query.keyword);
+        const post=new Post();
+        const response = await post.readSearchHeartPostAll(req.query.keyword);
         res.send(response);
 
     },
     searchViewsPosts:async(req,res)=>{
-        const posts=new Post();
-        const response = await posts.readSearchViewsPostAll(req.query.keyword);
+        const post=new Post();
+        const response = await post.readSearchViewsPostAll(req.query.keyword);
         res.send(response);
 
     },
+  
 
 
 }
@@ -110,6 +116,7 @@ const process={
         const response = await post.updatePost();
         return res.json(response);
     }
+
 
 };
 
