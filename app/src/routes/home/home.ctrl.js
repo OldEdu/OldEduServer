@@ -4,6 +4,7 @@ const User=require("../../models/User");
 const Teacher=require("../../models/Teacher");
 const Student = require("../../models/Student");
 const Post =require("../../models/Post");
+const EduPhoto = require("../../models/eduPhoto");
 
 const output={
     home : (req,res)=>{
@@ -47,6 +48,12 @@ const output={
     deletePost:async(req,res)=>{
         const post=new Post();
         const response = await post.deletePost(req.params.postID);
+        res.send(response);
+    },
+
+    deleteEduPhoto:async(req,res)=>{
+        const eduPhoto=new EduPhoto();
+        const response = await eduPhoto.deleteEduPhoto(req.params.eduPhotoID);
         res.send(response);
     },
     recentPosts:async(req,res)=>{
@@ -115,7 +122,17 @@ const process={
         const post=new Post(req.body);
         const response = await post.updatePost();
         return res.json(response);
-    }
+    },
+    createEduPhoto:async(req,res)=>{
+        const eduPhoto = new EduPhoto(req.body);
+        const response = await eduPhoto.createEduPhoto();
+        return res.json(response);
+    },
+    updateEduPhoto:async(req,res)=>{
+        const eduPhoto = new EduPhoto(req.body);
+        const response = await eduPhoto.updateEduPhoto();
+        return res.json(response);
+    },
 
 
 };
