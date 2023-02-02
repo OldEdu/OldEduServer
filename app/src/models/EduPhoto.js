@@ -1,5 +1,4 @@
 "use strict";
-const { eduPhoto_num } = require("./EduPhotoStorage");
 const EduPhotoStorage = require("./EduPhotoStorage");
 //EduPhoto은 게시글 데이터를 가지고 검증 및  조작하는 역할
 
