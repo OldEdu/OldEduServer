@@ -1,10 +1,10 @@
 "use strict";
-const { deletePost } = require("./PostStorage");
-//Post은 게시글 데이터를 가고 검증 및  조작하는 역할
+//Post은 게시글 데이터를 가지고 검증 및 조작하는 역할
 
 const PostStorage =require("./PostStorage");
 
 class Post{
+   
     constructor(body){
         this.body=body;
     }
@@ -115,6 +115,7 @@ class Post{
             return {success:false,err};
         }
     }
+
 }
 
 module.exports=Post
