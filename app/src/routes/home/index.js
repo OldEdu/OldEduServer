@@ -23,8 +23,11 @@ router.post("/register",ctrl.process.register);
 router.post("/profile/:userID",ctrl.process.profile);
 router.post("/createPost",ctrl.process.createPost);
 router.post("/updatePost",ctrl.process.updatePost);
+router.post("/createEduPhoto",ctrl.process.createEduPhoto);
+router.post("/updateEduPhoto",ctrl.process.updateEduPhoto);
 
 router.delete("/deletePost/:postID",ctrl.output.deletePost);
+router.delete("/deleteEduPhoto/:eduPhotoID",ctrl.output.deleteEduPhoto);
 
 
 module.exports=router;
