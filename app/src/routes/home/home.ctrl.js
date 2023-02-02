@@ -4,7 +4,7 @@ const User=require("../../models/User");
 const Teacher=require("../../models/Teacher");
 const Student = require("../../models/Student");
 const Post =require("../../models/Post");
-const EduPhoto = require("../../models/eduPhoto");
+const EduPhoto = require("../../models/EduPhoto");
 
 const output={
     home : (req,res)=>{
