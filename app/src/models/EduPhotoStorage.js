@@ -25,6 +25,37 @@ class EduPhotoStorage{
             }
         })
     }
+
+    //postID를 이용해 eduPost에 추가된 모든 교육사진 정보 불러오기
+    static async getEduPhotos(postID){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                var result=[];
+                var residx=0;
+                const eduPhotoRef = db.collection("eduPhoto")
+                var queryRef =await eduPhotoRef.where("postID","==",postID).get();
+            
+                 if(queryRef.empty){
+                    resolve({success:true , msg: "No eduPhotos have been created."}); //작성된 교육사진이 없습니다.
+                }
+                queryRef.forEach(doc=>{
+                    result[residx++]=doc.data();
+                })
+
+                result.sort(function(a,b){//생성 순으로 정렬
+                    if(a.eduPhotoID>b.eduPhotoID)return 1;
+                    else if(a.eduPhotoID<b.eduPhotoID) return -1;
+                    else return 0;
+                })
+
+
+                resolve({success:true, result});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+
+    }
  
     //eduPhotoID로 교육사진 수정
     static async updateEduPhoto(eduPhotoInfo){

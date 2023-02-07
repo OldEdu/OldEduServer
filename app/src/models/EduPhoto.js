@@ -37,8 +37,16 @@ class EduPhoto{
             return {success:false,err};
         }
     }
-
-     
+    //eduPost에 추가된 모든 교육사진 정보 불러오기
+    async readEduPhotos(){
+        const client =this.body;
+        try{
+            const response = await EduPhotoStorage.getEduPhotos(client); //postID 받음
+            return response;
+        }catch(err){
+            return {succrss: false,err};
+        }
+    }
 }
 
 module.exports=EduPhoto
