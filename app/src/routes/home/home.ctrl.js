@@ -45,6 +45,11 @@ const output={
         const response =await post.readPost();
         res.send(response);
     },
+    eduPhoto:async(req,res)=>{
+        const eduPhoto=new EduPhoto(req.params.postID);
+        const response =await eduPhoto.readEduPhotos();
+        res.send(response);
+    },
     deletePost:async(req,res)=>{
         const post=new Post();
         const response = await post.deletePost(req.params.postID);
