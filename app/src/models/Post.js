@@ -30,12 +30,18 @@ class Post{
             return {success:false,err};
         }
     }
+    //게시글 삭제하기 기능
     async deletePost(postID){
         try{
-            const response= await PostStorage.deletePost(postID);
+            //존재하지 않는 postID가 없는 경우
+            if(await PostStorage.getPostInfo(postID)){}
+            else{
+                const response= await PostStorage.deletePost(postID);
+                //게시글 삭제시 게시글에 속한 EduPhoto들도 삭제
+            }
             return response;
         }catch(err){
-            return {success:false,err};
+            return {success:false,err:"존재하지 않는 postID입니다."};
         }
     }
 
