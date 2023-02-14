@@ -43,7 +43,7 @@ class Post{
              
             return response;
         }catch(err){
-            return {success:false,err};
+            return {success:false,err:"존재하지 않는 postID입니다."};
         }
     }
 
