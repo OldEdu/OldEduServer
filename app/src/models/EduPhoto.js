@@ -28,6 +28,16 @@ class EduPhoto{
             return {success:false,err};
         }
     }
+    //게시글에 추가된 모든 교육사진 삭제
+    async deleteEduPhotos(postID){
+        try{
+            console.log(postID);
+            const response = await EduPhotoStorage.deleteEduPhotos(postID);
+            return response;
+        }catch(err){
+            return {success:false,err};
+        }
+    }
     //교육사진 삭제 기능
     async deleteEduPhoto(eduPhotoID){
         try{
