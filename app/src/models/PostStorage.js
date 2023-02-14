@@ -153,6 +153,9 @@ class PostStorage{
                     else if(b.in_date<a.in_date) return -1;
                     else return 0;
                 })
+                result.sort(function(a,b){ //하트 내림차순 정렬 
+                    return b.heart-a.heart;
+                })
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
@@ -178,7 +181,9 @@ class PostStorage{
                     else if(b.in_date<a.in_date) return -1;
                     else return 0;
                 })
-
+                result.sort(function(a,b){ //조회수 내림차순 정렬 
+                    return b.views-a.views;
+                })
                 resolve({success:true, result});
             }catch(err){
                 reject(`${err}`);
