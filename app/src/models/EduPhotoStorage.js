@@ -56,7 +56,29 @@ class EduPhotoStorage{
         })
 
     }
- 
+    //postID를 이용해 eduPost에 추가된 모든 교육사진 삭제하기
+    static async deleteEduPhotos(postID){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                var eduPhotoIDs=[];
+                var eduPhotoIdIdx=0;
+                const eduPhotoRef = await db.collection("eduPhoto").where("postID","==",postID).get();
+                eduPhotoRef.forEach(doc=>{
+                    eduPhotoIDs[eduPhotoIdIdx++]=doc.data().eduPhotoID;
+                })
+                const eduPhotoRef2 = await db.collection("eduPhoto")
+                eduPhotoIDs.forEach(eduPhotoID=>{
+                    eduPhotoRef2.doc(eduPhotoID).delete();
+                    
+                })
+
+                resolve({success:true});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+
+    }
     //eduPhotoID로 교육사진 수정
     static async updateEduPhoto(eduPhotoInfo){
         return new Promise(async(resolve,reject)=>{

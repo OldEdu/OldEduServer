@@ -2,6 +2,8 @@
 //Post은 게시글 데이터를 가지고 검증 및 조작하는 역할
 
 const PostStorage =require("./PostStorage");
+const EduPhoto =require("./EduPhoto");
+const EduPhotoStorage = require("./EduPhotoStorage");
 
 class Post{
    
@@ -34,14 +36,14 @@ class Post{
     async deletePost(postID){
         try{
             //존재하지 않는 postID가 없는 경우
-            if(await PostStorage.getPostInfo(postID)){}
-            else{
-                const response= await PostStorage.deletePost(postID);
-                //게시글 삭제시 게시글에 속한 EduPhoto들도 삭제
-            }
+            if(await PostStorage.getPostInfo(postID)){   }
+            var response= await PostStorage.deletePost(postID);
+            //게시글 삭제시 게시글에 속한 EduPhoto들도 삭제
+            response =await EduPhotoStorage.deleteEduPhotos(postID);
+             
             return response;
         }catch(err){
-            return {success:false,err:"존재하지 않는 postID입니다."};
+            return {success:false,err};
         }
     }
 
