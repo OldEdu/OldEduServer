@@ -19,4 +19,9 @@ router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
 router.post("/profile/:userID",ctrl.process.profile);
 router.post("/createPost",ctrl.process.createPost);
+router.post("/writeComment",ctrl.process.writeComment);
+router.post("/commentListPost",ctrl.process.commentListPost);
+router.post("/commentListUser",ctrl.process.commentListUser);
+router.post("/updateComment",ctrl.process.updateComment);
+
 module.exports=router;
