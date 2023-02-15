@@ -60,6 +60,16 @@ class ScrapStorage {
     }
 
     // delete
+    static async deleteScrap(scrapID){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                await db.collection("scrap").doc(scrapID).delete();
+                resolve({success:true});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
 }
 
 module.exports = ScrapStorage;
