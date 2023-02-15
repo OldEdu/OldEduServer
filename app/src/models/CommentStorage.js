@@ -68,8 +68,8 @@ class CommentStorage {
                 const comt_date = new Date().toLocaleString();
                 await db.collection("comment").doc(comtInfo.comtID)
                 .update({
-                    comtID:comtInfo.comtID,
-                    comt_date:comtInfo.comt_date,
+                    comt_content:comtInfo.comt_content,
+                    comt_date:comt_date,
                 })
                 resolve({success:true});
             }catch(err){
@@ -82,7 +82,7 @@ class CommentStorage {
     static async deleteComment(comtID){
         return new Promise(async(resolve,reject)=>{
             try{
-                await db.collection("comment").doc(comtId).delete();
+                await db.collection("comment").doc(comtID).delete();
                 resolve({success:true});
             }catch(err){
                 reject(`${err}`);

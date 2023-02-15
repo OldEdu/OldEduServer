@@ -24,4 +24,6 @@ router.post("/commentListPost",ctrl.process.commentListPost);
 router.post("/commentListUser",ctrl.process.commentListUser);
 router.post("/updateComment",ctrl.process.updateComment);
 
+router.delete("/deleteComment/:comtID",ctrl.output.deleteComment);
+
 module.exports=router;

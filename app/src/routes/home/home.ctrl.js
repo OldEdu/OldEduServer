@@ -64,6 +64,11 @@ const output={
         const response = await comment.writeComment();
         res.send(response);
     },
+    deleteComment:async(req,res)=>{
+        const comment = new Comment();
+        const response = await comment.deleteComment(req.params.comtID);
+        res.send(response);
+    },
 }
 
 const process={
