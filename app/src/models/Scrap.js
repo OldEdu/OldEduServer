@@ -53,7 +53,14 @@ class Scrap {
     }
 
     // 스크랩에 게시글 삭제
-    
+    async deleteScrap(scrapID){
+        try{
+            const response = await ScrapStorage.deleteScrap(scrapID);
+            return response;
+        }catch(err){
+            return {succrss: false,err};
+        }
+    }
 }
 
 module.exports = Scrap;

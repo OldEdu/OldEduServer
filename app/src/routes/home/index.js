@@ -16,4 +16,7 @@ router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
 router.post("/profile/:userID",ctrl.process.profile);
 router.post("/scrap",ctrl.process.scrap);
+
+router.delete("/deleteScrap/:scrapID",ctrl.output.deleteScrap);
+
 module.exports=router;

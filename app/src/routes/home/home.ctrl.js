@@ -39,8 +39,12 @@ const output={
         const scrap = new Scrap(req.params.userID);
         const response = await scrap.getScrapList(scrap.userID);
         res.send(response);
-    }
-
+    },
+    deleteScrap:async(req,res)=>{
+        const scrap = new Scrap();
+        const response = await scrap.deleteScrap(req.params.scrapID);
+        res.send(response);
+    },
 }
 
 const process={
