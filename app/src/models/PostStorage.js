@@ -93,7 +93,6 @@ class PostStorage{
         })
     }
 
-    //게시글 삭제하기
     //postID를 받아 게시글 삭제하기
     static async deletePost(postId){
         return new Promise(async(resolve,reject)=>{
@@ -106,6 +105,92 @@ class PostStorage{
         })
     }
 
+    //category에 맞는 게시글 불러오기 (하트수 정렬)
+    static async getHeartPosts(categoryName){
+        return new Promise(async(resolve, reject)=>{
+            try{
+                var result=[];
+                var residx=0;
+        
+                var categoryRef= await db.collection("eduPost").where("category","==",categoryName).get()
+                
+                if(categoryRef.empty){
+                    resolve({success:true , msg: categoryName+"카테고리에 속한 게시물이 없습니다."}); 
+                }
+                categoryRef.forEach(doc=>{    //데이터 갖고오기
+                    result[residx++]=doc.data();
+                })
+                result.sort(function(a,b){ //최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
+                })
+                result.sort(function(a,b){ //하트 내림차순 정렬 
+                    return b.heart-a.heart;
+                })
+                resolve({success:true, result});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
+    //category에 맞는 게시글 불러오기 (조회수 정렬)
+    static async getViewsPosts(categoryName){
+        return new Promise(async(resolve, reject)=>{
+            try{
+                var result=[];
+                var residx=0;
+                
+                var categoryRef= await db.collection("eduPost").where("category","==",categoryName).get();     
+    
+                if(categoryRef.empty){
+                    resolve({success:true , msg: categoryName+"카테고리에 속한 게시물이 없습니다."}); 
+                }
+                categoryRef.forEach(doc=>{//데이터 갖고오기
+                    result[residx++]=doc.data();
+                })
+                result.sort(function(a,b){ //최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
+                })
+                result.sort(function(a,b){ //조회수 내림차순 정렬 
+                    return b.views-a.views;
+                })
+                resolve({success:true, result});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
+     //category에 맞는 게시글 불러오기 (최신 정렬순)
+     static async getRecentPosts(categoryName){ 
+        return new Promise(async(resolve,reject)=>{
+            try{
+                console.log(categoryName);
+                var result=[];
+                var residx=0;
+                console.log(typeof(categoryName));
+                var categoryRef= await db.collection("eduPost").where("category","==",categoryName).get();     
+    
+                if(categoryRef.empty){
+                    resolve({success:true , msg: categoryName+"카테고리에 속한 게시물이 없습니다."}); 
+                }
+             
+                categoryRef.forEach(doc=>{  //데이터 갖고오기   
+                    result[residx++]=doc.data();
+                })
+                result.sort(function(a,b){//최신순 정렬
+                    if(b.in_date>a.in_date)return 1;
+                    else if(b.in_date<a.in_date) return -1;
+                    else return 0;
+                })
+                resolve({success:true, result});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
    
     //게시글 검색 (최신 정렬순)
     static async getSearchRecentPosts(keyword){ //검색 키워드가 매게변수이다.
