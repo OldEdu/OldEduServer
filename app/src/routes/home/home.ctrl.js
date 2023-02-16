@@ -61,24 +61,6 @@ const output={
         const response = await eduPhoto.deleteEduPhoto(req.params.eduPhotoID);
         res.send(response);
     },
-    recentPosts:async(req,res)=>{
-        const post=new Post();
-        const response = await post.readPostAll();
-        res.send(response);
-
-    },
-    heartPosts:async(req,res)=>{
-        const post=new Post();
-        const response = await post.readHeartPostAll();
-        res.send(response);
-
-    },
-    viewsPosts:async(req,res)=>{
-        const post=new Post();
-        const response = await post.readViewsPostAll();
-        res.send(response);
-
-    },
     searchRecentPosts:async(req,res)=>{
         const post=new Post();
         const response = await post.readSearchRecentPostAll(req.query.keyword);
