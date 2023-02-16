@@ -3,8 +3,10 @@ const db=require("../../config/db");
 const User=require("../../models/User");
 const Teacher=require("../../models/Teacher");
 const Student = require("../../models/Student");
+const Scrap = require("../../models/Scrap");
 const Post =require("../../models/Post");
 const EduPhoto = require("../../models/EduPhoto");
+const { response } = require("express");
 
 const output={
     home : (req,res)=>{
@@ -33,7 +35,6 @@ const output={
         }catch(error){
             res.send(error)
         }
-
     },
     myPost:async(req,res)=>{
         const posts= new Post(req.params.userID);
@@ -98,9 +99,16 @@ const output={
         res.send(response);
 
     },
-  
-
-
+    scrap:async(req,res)=>{
+        const scrap = new Scrap(req.params.userID);
+        const response = await scrap.getScrapList(scrap.userID);
+        res.send(response);
+    },
+    deleteScrap:async(req,res)=>{
+        const scrap = new Scrap();
+        const response = await scrap.deleteScrap(req.params.scrapID);
+        res.send(response);
+    }
 }
 
 const process={
@@ -118,29 +126,7 @@ const process={
         const teacher= new Teacher(req.body);
         const response=await teacher.updateProfile();
         return res.json(response);
-    },
-    createPost:async(req,res)=>{
-        const post = new Post(req.body);
-        const response = await post.createPost();
-        return res.json(response);
-    },
-    updatePost:async(req,res)=>{
-        const post=new Post(req.body);
-        const response = await post.updatePost();
-        return res.json(response);
-    },
-    createEduPhoto:async(req,res)=>{
-        const eduPhoto = new EduPhoto(req.body);
-        const response = await eduPhoto.createEduPhoto();
-        return res.json(response);
-    },
-    updateEduPhoto:async(req,res)=>{
-        const eduPhoto = new EduPhoto(req.body);
-        const response = await eduPhoto.updateEduPhoto();
-        return res.json(response);
-    },
-
-
+    }
 };
 
 module.exports={

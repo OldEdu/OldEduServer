@@ -30,7 +30,6 @@ class StudentStroage{
                     userName:studentInfo.userName,
                     psword:studentInfo.psword,
                     userType:studentInfo.userType,
-                    //스크랩 게시물
                 };
                 await db.collection("students").doc(userID).set(StudentJson);
                 resolve({success:true});
