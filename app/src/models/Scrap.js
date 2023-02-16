@@ -36,6 +36,7 @@ class Scrap {
         const client = this.body; // scrap JSON
         try{
             const response = await ScrapStorage.getScrapInfo(client);
+            return response;
         } catch(err) {
             return {succrss: false, msg:"The post you want doesn't exist."};
         }

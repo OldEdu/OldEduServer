@@ -95,9 +95,9 @@ const output={
         res.send(response);
 
     },
-    scrap:async(req,res)=>{
+    getScrapList:async(req,res)=>{
         const scrap = new Scrap(req.params.userID);
-        const response = await scrap.getScrapList(scrap.userID);
+        const response = await scrap.getScrapList();
         res.send(response);
     },
     deleteScrap:async(req,res)=>{
