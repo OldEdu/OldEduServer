@@ -22,7 +22,7 @@ class Comment{
     async getComment_Post(){
         const client = this.body; // postID 가져오기
         try{
-            const response = await CommentStorage.getCommentList_Post(client.postID);
+            const response = await CommentStorage.getCommentList_Post(client);
             return response;
         }catch(err){
             return {succrss: false,err};
@@ -33,7 +33,7 @@ class Comment{
     async getComment_User(){
         const client = this.body; // userID 가져오기
         try{
-            const response = await CommentStorage.getCommentList_User(client.userID);
+            const response = await CommentStorage.getCommentList_User(client);
             return response;
         }catch(err){
             return {succrss: false,err};

@@ -19,6 +19,8 @@ router.get("/searchRecentPosts/:category",ctrl.output.searchRecentPosts);
 router.get("/searchHeartPosts/:category",ctrl.output.searchHeartPosts);
 router.get("/searchViewsPosts/:category",ctrl.output.searchViewsPosts);
 router.get("/getScrapList/:userID",ctrl.output.getScrapList);
+router.post("/commentListPost/:postID",ctrl.output.commentListPost);
+router.post("/commentListUser/:userID",ctrl.output.commentListUser);
 
 router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
@@ -29,8 +31,6 @@ router.post("/createEduPhoto",ctrl.process.createEduPhoto);
 router.post("/updateEduPhoto",ctrl.process.updateEduPhoto);
 router.post("/scrap",ctrl.process.scrap);
 router.post("/writeComment",ctrl.process.writeComment);
-router.post("/commentListPost",ctrl.process.commentListPost);
-router.post("/commentListUser",ctrl.process.commentListUser);
 router.post("/updateComment",ctrl.process.updateComment);
 
 router.delete("/deletePost/:postID",ctrl.output.deletePost);

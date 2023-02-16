@@ -29,9 +29,6 @@ class ScrapStorage {
                 if(queryRef.empty){
                     resolve({success:true , msg: "You don't have any scrap."}); 
                 }
-                // for(var i=0; i<queryRef.size; i++){
-                //     result[i]=queryRef.docs.at(i).data();
-                // }
                 queryRef.forEach(doc=>{
                     result[idx++]=doc.data();
                 })
