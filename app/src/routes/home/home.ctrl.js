@@ -105,6 +105,16 @@ const output={
         const response = await scrap.deleteScrap(req.params.scrapID);
         res.send(response);
     },
+    commentListPost:async(req,res)=>{
+        const comment = new Comment(req.params.postID);
+        const response = await comment.getComment_Post();
+        return res.json(response);
+    },
+    commentListUser:async(req,res)=>{
+        const comment = new Comment(req.params.userID);
+        const response = await comment.getComment_User();
+        return res.json(response);
+    },
     deleteComment:async(req,res)=>{
         const comment = new Comment();
         const response = await comment.deleteComment(req.params.comtID);
@@ -163,16 +173,6 @@ const process={
     writeComment:async(req,res)=>{
         const comment = new Comment(req.body);
         const response = await comment.writeComment();
-        return res.json(response);
-    },
-    commentListPost:async(req,res)=>{
-        const comment = new Comment(req.body);
-        const response = await comment.getComment_Post();
-        return res.json(response);
-    },
-    commentListUser:async(req,res)=>{
-        const comment = new Comment(req.body);
-        const response = await comment.getComment_User();
         return res.json(response);
     },
     updateComment:async(req,res)=>{
