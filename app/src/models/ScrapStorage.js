@@ -23,15 +23,18 @@ class ScrapStorage {
         return new Promise(async(resolve,reject) => {
             try{
                 var result = [];
+                var idx = 0;
                 const scrapRef = db.collection("scrap");
                 var queryRef =await scrapRef.where("userID","==",userID).get();
-            
-                 if(queryRef.empty){
+                if(queryRef.empty){
                     resolve({success:true , msg: "You don't have any scrap."}); 
                 }
-                for(var i=0; i<queryRef.size; i++){
-                    result[i]=queryRef.docs.at(i).data();
-                }
+                // for(var i=0; i<queryRef.size; i++){
+                //     result[i]=queryRef.docs.at(i).data();
+                // }
+                queryRef.forEach(doc=>{
+                    result[idx++]=doc.data();
+                })
                 resolve({success:true, result});
             }catch(err) {
                 reject(`${err}`)
