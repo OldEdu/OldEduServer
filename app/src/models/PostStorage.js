@@ -60,9 +60,10 @@ class PostStorage {
                     title: postInfo.title,
                     category: postInfo.category,
                     in_date: in_date,
-                    views: 0,            //조회수,하트,신고수 0회로 초기 셋팅
+                    views: 0,            //조회수,하트,스크랩,신고수 0회로 초기 셋팅
                     heart: 0,
                     declaration: 0,
+                    scrap:0,
                     userID: postInfo.userID,
                 }
                 const postRef = await db.collection("eduPost").add(postJson);
