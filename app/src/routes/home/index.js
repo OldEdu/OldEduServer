@@ -19,8 +19,8 @@ router.get("/searchRecentPosts/:category",ctrl.output.searchRecentPosts);
 router.get("/searchHeartPosts/:category",ctrl.output.searchHeartPosts);
 router.get("/searchViewsPosts/:category",ctrl.output.searchViewsPosts);
 router.get("/getScrapList/:userID",ctrl.output.getScrapList);
-router.post("/commentListPost/:postID",ctrl.output.commentListPost);
-router.post("/commentListUser/:userID",ctrl.output.commentListUser);
+router.get("/commentListPost/:postID",ctrl.output.commentListPost);
+router.get("/commentListUser/:userID",ctrl.output.commentListUser);
 
 router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
