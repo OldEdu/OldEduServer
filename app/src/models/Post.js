@@ -67,35 +67,7 @@ class Post{
             return {succrss: false,err};
         }
     }
-    //하트가 많은 게시글 불러오기
-    async readHeartPostAll(){
-        try{ 
-            const response = await PostStorage.getHeartPosts();
-            return response;
-        }catch(err){
-            return {succrss: false,err};
-        }
-    }
-
-    //조회수 가장 높은 게시글 불러오기
-    async readViewsPostAll(){
-        try{
-            const response = await PostStorage.getViewsPosts();
-            return response;
-        }catch(err){
-            return {success:false,err};
-        }
-    }
     
-    //최근 게시글 불러오기
-    async readPostAll(){
-        try{
-            const response = await PostStorage.getRecentPosts();
-            return response;
-        }catch(err){
-            return {success:false,err};
-        }
-    } 
     //게시글 검색(최신순)
     async readSearchRecentPostAll(keyword){
         try{
