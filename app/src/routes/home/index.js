@@ -12,7 +12,9 @@ router.get("/profile/:userID",ctrl.output.profile);
 router.get("/myPost/:userID",ctrl.output.myPost);
 router.get("/post/:postID",ctrl.output.post);
 router.get("/eduPhoto/:postID",ctrl.output.eduPhoto);
-
+router.get("/recentPosts/:category",ctrl.output.recentPosts);
+router.get("/heartPosts/:category",ctrl.output.heartPosts);
+router.get("/viewsPosts/:category",ctrl.output.viewsPosts);
 router.get("/searchRecentPosts",ctrl.output.searchRecentPosts);
 router.get("/searchHeartPosts",ctrl.output.searchHeartPosts);
 router.get("/searchViewsPosts",ctrl.output.searchViewsPosts);
