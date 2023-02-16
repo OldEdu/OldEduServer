@@ -61,7 +61,7 @@ class Post {
     async readMyPostAll() {
         const client = this.body;
         try {
-            const response = await PostStorage.getPosts(client); //client = userID정보 받음
+            const response = await PostStorage.getMyPosts(client); //client = userID정보 받음
             return response;
         } catch (err) {
             return { succrss: false, err };
@@ -97,27 +97,27 @@ class Post {
         }
     }
     //게시글 검색(최신순)
-    async readSearchRecentPostAll(keyword) {
+    async readSearchRecentPostAll(category,keyword) {
         try {
-            const response = await PostStorage.getSearchRecentPosts(keyword);
+            const response = await PostStorage.getSearchRecentPosts(category,keyword);
             return response;
         } catch (err) {
             return { success: false, err };
         }
     }
     //게시글 검색(하트)
-    async readSearchHeartPostAll(keyword) {
+    async readSearchHeartPostAll(category,keyword) {
         try {
-            const response = await PostStorage.getSearchHeartPosts(keyword);
+            const response = await PostStorage.getSearchHeartPosts(category,keyword);
             return response;
         } catch (err) {
             return { success: false, err };
         }
     }
     //게시글 검색(조회수)
-    async readSearchViewsPostAll(keyword) {
+    async readSearchViewsPostAll(category,keyword) {
         try {
-            const response = await PostStorage.getSearchViewsPosts(keyword);
+            const response = await PostStorage.getSearchViewsPosts(category,keyword);
             return response;
         } catch (err) {
             return { success: false, err };
