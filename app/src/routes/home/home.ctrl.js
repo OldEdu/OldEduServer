@@ -82,19 +82,19 @@ const output={
 
     searchRecentPosts:async(req,res)=>{
         const post=new Post();
-        const response = await post.readSearchRecentPostAll(req.query.keyword);
+        const response = await post.readSearchRecentPostAll(req.params.category,req.query.keyword);
         res.send(response);
 
     },
     searchHeartPosts:async(req,res)=>{
         const post=new Post();
-        const response = await post.readSearchHeartPostAll(req.query.keyword);
+        const response = await post.readSearchHeartPostAll(req.params.category,req.query.keyword);
         res.send(response);
 
     },
     searchViewsPosts:async(req,res)=>{
         const post=new Post();
-        const response = await post.readSearchViewsPostAll(req.query.keyword);
+        const response = await post.readSearchViewsPostAll(req.params.category,req.query.keyword);
         res.send(response);
 
     },

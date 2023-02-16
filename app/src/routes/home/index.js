@@ -15,9 +15,9 @@ router.get("/eduPhoto/:postID",ctrl.output.eduPhoto);
 router.get("/recentPosts/:category",ctrl.output.recentPosts);
 router.get("/heartPosts/:category",ctrl.output.heartPosts);
 router.get("/viewsPosts/:category",ctrl.output.viewsPosts);
-router.get("/searchRecentPosts",ctrl.output.searchRecentPosts);
-router.get("/searchHeartPosts",ctrl.output.searchHeartPosts);
-router.get("/searchViewsPosts",ctrl.output.searchViewsPosts);
+router.get("/searchRecentPosts/:category",ctrl.output.searchRecentPosts);
+router.get("/searchHeartPosts/:category",ctrl.output.searchHeartPosts);
+router.get("/searchViewsPosts/:category",ctrl.output.searchViewsPosts);
 
 router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
