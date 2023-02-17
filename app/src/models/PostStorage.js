@@ -9,7 +9,14 @@ class PostStorage {
         return new Promise(async (resolve, reject) => {
             try {
                 const postRef = db.collection("eduPost").doc(postID);
+                const post = await postRef.get();
+        
+                await db.collection("eduPost").doc(postID)
+                .update({
+                    views: ++(post.data().views), //게시글 조회수1 증가  
+                })
                 const response = await postRef.get();
+
                 resolve(response.data());
             } catch (err) {
                 reject(`${err}`);
@@ -265,6 +272,8 @@ class PostStorage {
             }
         })
     }
+    // 교육자 하트수 올리기
+    // 스크랩 수 올리기
 
 }
 // async function getSearchPosts(categoryName, keyword) {
@@ -301,8 +310,5 @@ async function getPosts(categoryName) {
     return result;
 }
 
-//알파벳 판별을 위한 함수
-function isAlphaOrParen(str) {
-    return /^[a-zA-Z()]+$/.test(str);
-}
+
 module.exports = PostStorage

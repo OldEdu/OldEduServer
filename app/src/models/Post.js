@@ -2,7 +2,6 @@
 //Post은 게시글 데이터를 가지고 검증 및 조작하는 역할
 
 const PostStorage = require("./PostStorage");
-const EduPhoto = require("./EduPhoto");
 const EduPhotoStorage = require("./EduPhotoStorage");
 
 class Post {
@@ -123,6 +122,9 @@ class Post {
             return { success: false, err };
         }
     }
+    // 교육자 하트수 올리기
+    // 게시글 조회수 올리기
+    // 스크랩 수 올리기
 
 }
 
