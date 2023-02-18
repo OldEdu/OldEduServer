@@ -64,7 +64,7 @@ const output={
     },
     recentPosts:async(req,res)=>{
         const posts = new Post();
-        const response = await posts.readPostAll(req.params.category);
+        const response = await posts.readRecentPostAll(req.params.category);
         res.send(response);
     },
     heartPosts:async(req,res)=>{
