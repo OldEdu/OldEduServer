@@ -64,12 +64,12 @@ const output={
     },
     recentPosts:async(req,res)=>{
         const posts = new Post();
-        const response = await posts.readPostAll();
+        const response = await posts.readPostAll(req.params.category);
         res.send(response);
     },
     heartPosts:async(req,res)=>{
         const posts = new Post();
-        const response = await posts.readHeartPostAll();
+        const response = await posts.readHeartPostAll(req.params.category);
         res.send(response);
     },
     viewsPosts:async(req,res)=>{
