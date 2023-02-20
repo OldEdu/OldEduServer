@@ -78,7 +78,7 @@ class PostStorage {
                     .update({
                         postID: postRef.id, //필드에 postID추가
                     })
-                resolve({ success: true });
+                resolve({ success: true , postID:postRef.id});
             } catch (err) {
                 reject(`${err}`);
             }
