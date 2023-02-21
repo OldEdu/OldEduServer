@@ -272,10 +272,39 @@ class PostStorage {
             }
         })
     }
-    // 교육자 하트수 올리기
-    // 스크랩 수 올리기
+    // 게시글,게시글 작성한 교육자 하트수 올리기
+    static async updatePostHeart(postID){
+        return new Promise(async (resolve, reject) => {
+            try {
+                var postRef = db.collection("eduPost").doc(postID);
+                const post = await postRef.get();
 
+                await db.collection("eduPost").doc(postID)
+                .update({
+                    heart: ++(post.data().heart), //게시글 하트수 1개 증가  
+                })
+                const response = await postRef.get();
+                
+                var userID = post.data().userID;
+                var teacherstRef= db.collection("teachers").doc(userID);
+
+                const teacher = await teacherstRef.get();
+                await teacherstRef
+                .update({
+                    heart:++(teacher.data().heart), //선생님 하트수 1개 증가
+                })
+
+                resolve(response.data()); //하트 수 1증가 된 게시글 리턴
+                
+        } catch (err) {
+            reject(`${err}`);
+        }
+    })
+    
+    }
+        
 }
+
 // async function getSearchPosts(categoryName, keyword) {
 //     var result = [];
 //     var residx = 0;

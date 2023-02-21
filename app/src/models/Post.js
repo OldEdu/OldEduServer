@@ -122,19 +122,16 @@ class Post {
             return { success: false, err };
         }
     }
-    // // 게시글 하트수 올리기
-    // async upPostHeart(){
-    //     try {
-    //         const client = this.body;
-    //         const response = await PostStorage.updatePostHeart(client);
-    //         return response;
-    //     } catch (err) {
-    //         return { success: false, err };
-    //     }
-    // }
-    
-
-    // 스크랩 수 올리기
+    // 게시글 하트수 올리기
+    async upPostHeart(){
+        try {
+            const client = this.body;
+            const response = await PostStorage.updatePostHeart(client);
+            return response;
+        } catch (err) {
+            return { success: false, err };
+        }
+    }
 
 }
 
