@@ -77,6 +77,11 @@ const output={
         const response = await post.readViewsPostAll(req.params.category);
         res.send(response);
     },
+    upPostHeart:async(req,res)=>{
+        const post=new Post(req.params.postID);
+        const response = await post.upPostHeart();
+        res.send(response);
+    },
     searchRecentPosts:async(req,res)=>{
         const post=new Post();
         const response = await post.readSearchRecentPostAll(req.params.category,req.query.keyword);
