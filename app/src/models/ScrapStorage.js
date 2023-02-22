@@ -50,7 +50,14 @@ class ScrapStorage {
                 const res = await db.collection("scrap").add(scrapJson);
                 await db.collection("scrap").doc(res.id)
                 .update({
-                    scrapID:res.id,
+                    scrapID:res.id,    
+                })
+
+                const postRef = db.collection("eduPost").doc(scrapInfo.postID);
+                const post = await postRef.get();
+                await db.collection("eduPost").doc(scrapInfo.postID)
+                .update({
+                    scrap: ++(post.data().scrap),
                 })
                 resolve({success:true});
             } catch(error){
@@ -58,11 +65,25 @@ class ScrapStorage {
             }     
         })
     }
-
+    
     // delete
     static async deleteScrap(scrapID){
         return new Promise(async(resolve,reject)=>{
             try{
+                const scrapRef = db.collection("scrap").doc(scrapID);
+                const scrap = await scrapRef.get();
+
+                const postID = scrap.data().postID;
+                const postRef = db.collection("eduPost").doc(postID);
+                const post = await postRef.get();
+                const scrapCount = post.data().scrap;
+                // eduPost의 scrap이 0 이하인 경우에는 -1을하지 못하도록 함
+                if (scrapCount > 0) {
+                    await db.collection("eduPost").doc(postID)
+                    .update({
+                        scrap: --(post.data().scrap),
+                    })
+                }
                 await db.collection("scrap").doc(scrapID).delete();
                 resolve({success:true});
             }catch(err){
