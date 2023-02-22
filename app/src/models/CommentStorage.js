@@ -89,6 +89,27 @@ class CommentStorage {
             }
         })
     }
+    //eduPost삭제시 eduPost달린 댓글 삭제하기
+    static async deleteComments(postID){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                var commentIDs=[];
+                var commentIdIdx=0;
+                const commentRef = await db.collection("comment").where("postID","==",postID).get();
+                commentRef.forEach(doc=>{
+                    commentIDs[commentIdIdx++]=doc.data().comtID;
+                })
+                const commentRef2 = db.collection("comment")
+                commentIDs.forEach(comtID=>{
+                    commentRef2.doc(comtID).delete();
+                    
+                })
+                resolve({success:true});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
 
     // 댓글 등록하기(save)
     static async save(commentInfo){
