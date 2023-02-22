@@ -3,7 +3,7 @@
 
 const PostStorage = require("./PostStorage");
 const EduPhotoStorage = require("./EduPhotoStorage");
-
+const CommentStorage = require("./CommentStorage");
 class Post {
 
     constructor(body) {
@@ -39,6 +39,8 @@ class Post {
             var response = await PostStorage.deletePost(postID);
             //게시글 삭제시 게시글에 속한 EduPhoto들도 삭제
             response = await EduPhotoStorage.deleteEduPhotos(postID);
+            //게시글 삭제시 게시글에 속한 comment들도 삭제
+            response = await CommentStorage.deleteComments(postID);
 
             return response;
         } catch (err) {
