@@ -14,7 +14,7 @@ class EduPhoto{
             const response = await EduPhotoStorage.saveEduPhoto(client);
             return response;
         }catch(err){
-            return {succrss: false,err};
+            return {success: false,err };
         }
 
      }
