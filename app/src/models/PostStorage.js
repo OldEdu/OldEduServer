@@ -40,11 +40,7 @@ class PostStorage {
                     result[residx++] = doc.data();
                 })
 
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
 
 
                 resolve({ success: true, result });
@@ -124,11 +120,8 @@ class PostStorage {
                     resolve({ success: true, msg: `${categoryName} 카테고리에 생성된 게시물이 없습니다.` }); //생성된 게시물이 없습니다.
                 }
                 
-                result.sort(function (a, b) { //최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
+
                 result.sort(function (a, b) { //하트 내림차순 정렬 
                     return b.heart - a.heart;
                 })
@@ -149,11 +142,8 @@ class PostStorage {
                     resolve({ success: true, msg: `${categoryName} 카테고리에 생성된 게시물이 없습니다.` }); //생성된 게시물이 없습니다.
                 }
 
-                result.sort(function (a, b) { //최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
+
                 result.sort(function (a, b) { //조회수 내림차순 정렬 
                     return b.views - a.views;
                 })
@@ -177,11 +167,8 @@ class PostStorage {
                     resolve({ success: true, msg: `${categoryName} 카테고리에 생성된 게시물이 없습니다.` }); //생성된 게시물이 없습니다.
                 }
                 
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
+
                 resolve({ success: true, result });
             } catch (err) {
                 reject(`${err}`);
@@ -199,11 +186,8 @@ class PostStorage {
                     resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
                 }
 
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
+
                 resolve({ success: true, result });
             } catch (err) {
                 reject(`${err}`);
@@ -220,11 +204,8 @@ class PostStorage {
                     resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
                 }
 
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
+
                 result.sort(function (a, b) { //하트 내림차순 정렬 
                     return b.heart - a.heart;
                 })
@@ -247,11 +228,8 @@ class PostStorage {
                     resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
                 }
                 
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
+
                 result.sort(function (a, b) { //조회수 내림차순 정렬 
                     return b.views - a.views;
                 })
@@ -294,6 +272,15 @@ class PostStorage {
     
     }
         
+}
+//배열을 최신순으로 정렬해주는 함수
+function recentSort(array){
+    array.sort(function (a, b) {//최신순 정렬
+        if (b.in_date > a.in_date) return 1;
+        else if (b.in_date < a.in_date) return -1;
+        else return 0;
+    })
+    return array;
 }
 
 async function getSearchPosts(categoryName, keyword) {
