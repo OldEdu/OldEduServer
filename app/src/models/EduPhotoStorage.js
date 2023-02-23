@@ -99,8 +99,16 @@ class EduPhotoStorage{
     static async deleteEduPhoto(eduPhotoID){
         return new Promise(async(resolve,reject)=>{
             try{
-                await db.collection("eduPhoto").doc(eduPhotoID).delete();
-                resolve({success:true});
+                let eduPhotoRef = await db.collection("eduPhoto").doc(eduPhotoID);
+                
+                if(await (await eduPhotoRef.get()).exists){
+                    eduPhotoRef.delete();
+                    resolve({success:true});
+                }
+                else{
+                    resolve({success:false, err:"생성되지 않은 eduPhotoID입니다."})
+                }
+                
             }catch(err){
                 reject(`${err}`);
             }
