@@ -119,6 +119,11 @@ class PostStorage {
             try {
                 var result = [];
                 result = await getPosts(categoryName);
+
+                if(result.length==0){
+                    resolve({ success: true, msg: `${categoryName} 카테고리에 생성된 게시물이 없습니다.` }); //생성된 게시물이 없습니다.
+                }
+                
                 result.sort(function (a, b) { //최신순 정렬
                     if (b.in_date > a.in_date) return 1;
                     else if (b.in_date < a.in_date) return -1;
@@ -139,6 +144,10 @@ class PostStorage {
             try {
                 var result = [];
                 result = await getPosts(categoryName);
+                
+                if(result.length==0){
+                    resolve({ success: true, msg: `${categoryName} 카테고리에 생성된 게시물이 없습니다.` }); //생성된 게시물이 없습니다.
+                }
 
                 result.sort(function (a, b) { //최신순 정렬
                     if (b.in_date > a.in_date) return 1;
@@ -161,8 +170,13 @@ class PostStorage {
         return new Promise(async (resolve, reject) => {
             try {
                 var result = [];
+                
                 result = await getPosts(categoryName);
-
+                
+                if(result.length==0){
+                    resolve({ success: true, msg: `${categoryName} 카테고리에 생성된 게시물이 없습니다.` }); //생성된 게시물이 없습니다.
+                }
+                
                 result.sort(function (a, b) {//최신순 정렬
                     if (b.in_date > a.in_date) return 1;
                     else if (b.in_date < a.in_date) return -1;
@@ -328,10 +342,6 @@ async function getPosts(categoryName) {
     var result = [];
     var residx = 0;
     var categoryRef = await db.collection("eduPost").where("category", "==", categoryName).get();
-
-    if (categoryRef.empty) {
-        resolve({ success: true, msg: categoryName + "카테고리에 속한 게시물이 없습니다." });
-    }
 
     categoryRef.forEach(doc => {  //데이터 갖고오기   
         result[residx++] = doc.data();
