@@ -19,7 +19,7 @@ class EduPhotoStorage{
                 .update({
                     eduPhotoID:eduPhotoRef.id, //필드에 postID추가
                 })
-                resolve({success:true});
+                resolve({success:true,eduPhotoID:eduPhotoRef.id});
             }catch(err){
                 reject(`${err}`);
             }
