@@ -36,7 +36,7 @@ class EduPhotoStorage{
                 var queryRef =await eduPhotoRef.where("postID","==",postID).get();
             
                  if(queryRef.empty){
-                    resolve({success:true , msg: "작성된 교육사진이 없습니다."}); //작성된 교육사진이 없습니다.
+                    resolve({success:true , msg: "생성되지 않은 postID입니다."}); 
                 }
                 queryRef.forEach(doc=>{
                     result[residx++]=doc.data();
