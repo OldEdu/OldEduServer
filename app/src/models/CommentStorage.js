@@ -13,6 +13,11 @@ class CommentStorage {
                 var result = [];
                 var idx = 0;
                 const commentRef = db.collection("comment");
+                const postRef = db.collection("eduPost").doc(postID);
+                const post = await postRef.get();
+                if(post.data() === undefined){
+                    resolve({sucess:false, msg: "This post does not exist."});
+                }
                 var queryRef = await commentRef.where("postID","==",postID).get();
                 if(queryRef.empty){
                     resolve({success:true , msg: "This post don't have any comment."});
@@ -34,6 +39,11 @@ class CommentStorage {
                 var result = [];
                 var idx = 0;
                 const commentRef = db.collection("comment");
+                const userRef = db.collection("users").doc(userID);
+                const user = await userRef.get();
+                if(user.data() === undefined){
+                    resolve({sucess:false, msg: "This user does not exist."});
+                }
                 var queryRef = await commentRef.where("userID","==",userID).get();
                 if(queryRef.empty){
                     resolve({success:true , msg: "This user didn't write any comment."});
@@ -116,9 +126,14 @@ class CommentStorage {
         return new Promise(async(resolve,reject)=>{
             try{
                 const comt_date = new Date().toLocaleString(); //게시글 등록 시 날짜 및 시간
+                // userName 가져오기
+                const userRef = db.collection("users").doc(postInfo.userID);
+                const user = await userRef.get();
+                const userName = user.data().userName;
                 const commentJson={
-                    userID : commentInfo.userID,
                     postID : commentInfo.postID,
+                    userID : commentInfo.userID,
+                    userName: userName,
                     comt_content : commentInfo.comt_content,
                     comt_date : comt_date
                 };

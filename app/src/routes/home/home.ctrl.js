@@ -120,6 +120,11 @@ const output={
         const response = await comment.getComment_User();
         return res.json(response);
     },
+    getComment:async(req,res)=>{
+        const comment = new Comment(req.params.comtID);
+        const response = await comment.getComment();
+        return res.json(response);
+    },
     deleteComment:async(req,res)=>{
         const comment = new Comment();
         const response = await comment.deleteComment(req.params.comtID);
