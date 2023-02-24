@@ -21,6 +21,7 @@ router.get("/searchViewsPosts/:category",ctrl.output.searchViewsPosts);
 router.get("/getScrapList/:userID",ctrl.output.getScrapList);
 router.get("/commentListPost/:postID",ctrl.output.commentListPost);
 router.get("/commentListUser/:userID",ctrl.output.commentListUser);
+router.get("/getComment/:comtID",ctrl.output.getComment);
 router.get("/upPostHeart/:postID",ctrl.output.upPostHeart);
 
 

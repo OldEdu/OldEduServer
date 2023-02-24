@@ -14,7 +14,7 @@ class Comment{
             const response = await CommentStorage.save(client);
             return response;
         }catch(err){
-            return {succrss: false,err};
+            return {success:false,err};
         }
     }
 
@@ -25,7 +25,7 @@ class Comment{
             const response = await CommentStorage.getCommentList_Post(client);
             return response;
         }catch(err){
-            return {succrss: false,err};
+            return {success:false,err};
         }
     }
 
@@ -36,7 +36,18 @@ class Comment{
             const response = await CommentStorage.getCommentList_User(client);
             return response;
         }catch(err){
-            return {succrss: false,err};
+            return {success:false,err};
+        }
+    }
+
+    // 특정 댓글 정보 가져오기
+    async getComment(){
+        const client = this.body;
+        try{
+            const response = await CommentStorage.getCommet(client);
+            return response;
+        }catch(err) {
+            return {success:false,err}
         }
     }
 
@@ -47,7 +58,7 @@ class Comment{
             const response = await CommentStorage.updateComment(client);
             return response;
         }catch(err){
-            return {succrss: false,err};
+            return {success:false,err};
         }
     }     
 
@@ -57,7 +68,7 @@ class Comment{
             const response = await CommentStorage.deleteComment(comtID);
             return response;
         }catch(err){
-            return {succrss: false,err};
+            return {success:false,err};
         }
     }
 }

@@ -38,7 +38,7 @@ class Scrap {
             const response = await ScrapStorage.getScrapInfo(client);
             return response;
         } catch(err) {
-            return {succrss: false, msg:"The post you want doesn't exist."};
+            return {success:false, msg:"The post you want doesn't exist."};
         }
     }
 
@@ -49,7 +49,7 @@ class Scrap {
             const response = await ScrapStorage.getUserScrap(client);
             return response;
         } catch(err) {
-            return {succrss: false,err};
+            return {success:false,err};
         }
     }
 
@@ -59,7 +59,7 @@ class Scrap {
             const response = await ScrapStorage.deleteScrap(scrapID);
             return response;
         }catch(err){
-            return {succrss: false,err};
+            return {success:false,err};
         }
     }
 }
