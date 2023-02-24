@@ -40,11 +40,7 @@ class PostStorage {
                     result[residx++] = doc.data();
                 })
 
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
 
 
                 resolve({ success: true, result });
@@ -124,11 +120,13 @@ class PostStorage {
             try {
                 var result = [];
                 result = await getPosts(categoryName);
-                result.sort(function (a, b) { //최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+
+                if(result.length==0){
+                    resolve({ success: true, msg: `${categoryName} 카테고리에 생성된 게시물이 없습니다.` }); //생성된 게시물이 없습니다.
+                }
+                
+                result=recentSort(result); //최신순 정렬
+
                 result.sort(function (a, b) { //하트 내림차순 정렬 
                     return b.heart - a.heart;
                 })
@@ -144,12 +142,13 @@ class PostStorage {
             try {
                 var result = [];
                 result = await getPosts(categoryName);
+                
+                if(result.length==0){
+                    resolve({ success: true, msg: `${categoryName} 카테고리에 생성된 게시물이 없습니다.` }); //생성된 게시물이 없습니다.
+                }
 
-                result.sort(function (a, b) { //최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
+
                 result.sort(function (a, b) { //조회수 내림차순 정렬 
                     return b.views - a.views;
                 })
@@ -166,13 +165,15 @@ class PostStorage {
         return new Promise(async (resolve, reject) => {
             try {
                 var result = [];
+                
                 result = await getPosts(categoryName);
+                
+                if(result.length==0){
+                    resolve({ success: true, msg: `${categoryName} 카테고리에 생성된 게시물이 없습니다.` }); //생성된 게시물이 없습니다.
+                }
+                
+                result=recentSort(result); //최신순 정렬
 
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
                 resolve({ success: true, result });
             } catch (err) {
                 reject(`${err}`);
@@ -184,25 +185,14 @@ class PostStorage {
     static async getSearchRecentPosts(categoryName, keyword) { //검색 키워드가 매게변수이다.
         return new Promise(async (resolve, reject) => {
             try {
-                var result = [];
-                var residx = 0;
-                var postRef = db.collection("eduPost");
-                var categoryRef = postRef.where("category", "==", categoryName);
-
-                var searchRef = await categoryRef.orderBy("title").startAt(keyword).endAt(keyword + '\uf8ff').get();
-
-                if (searchRef.empty) {
-                    resolve({ success: true, msg: "검색된 게시물이 없습니다." }); //검색된 게시물이 없습니다.
+                let result =await getSearchPosts(categoryName,keyword);
+                
+                if (result.length==0) {
+                    resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
                 }
 
-                searchRef.forEach(doc => {  //데이터 갖고오기   
-                    result[residx++] = doc.data();
-                })
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
+
                 resolve({ success: true, result });
             } catch (err) {
                 reject(`${err}`);
@@ -213,25 +203,14 @@ class PostStorage {
     static async getSearchHeartPosts(categoryName, keyword) { //검색 키워드가 매게변수이다.
         return new Promise(async (resolve, reject) => {
             try {
-                var result = [];
-                var residx = 0;
-                var postRef = db.collection("eduPost");
-                var categoryRef = postRef.where("category", "==", categoryName);
+                let result = await getSearchPosts(categoryName,keyword);
 
-                var searchRef = await categoryRef.orderBy("title").startAt(keyword).endAt(keyword + '\uf8ff').get();
-
-                if (searchRef.empty) {
-                    resolve({ success: true, msg: "검색된 게시물이 없습니다." }); //검색된 게시물이 없습니다.
+                if (result.length==0) {
+                    resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
                 }
 
-                searchRef.forEach(doc => {  //데이터 갖고오기   
-                    result[residx++] = doc.data();
-                })
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
+                result=recentSort(result); //최신순 정렬
+
                 result.sort(function (a, b) { //하트 내림차순 정렬 
                     return b.heart - a.heart;
                 })
@@ -247,25 +226,15 @@ class PostStorage {
     static async getSearchViewsPosts(categoryName, keyword) { //검색 키워드가 매게변수이다.
         return new Promise(async (resolve, reject) => {
             try {
-                var result = [];
-                var residx = 0;
-                var postRef = db.collection("eduPost");
-                var categoryRef = postRef.where("category", "==", categoryName);
 
-                var searchRef = await categoryRef.orderBy("title").startAt(keyword).endAt(keyword + '\uf8ff').get();
+                let result = await getSearchPosts(categoryName,keyword);
 
-                if (searchRef.empty) {
-                    resolve({ success: true, msg: "검색된 게시물이 없습니다." }); //검색된 게시물이 없습니다.
+                if (result.length==0) {
+                    resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
                 }
+                
+                result=recentSort(result); //최신순 정렬
 
-                searchRef.forEach(doc => {  //데이터 갖고오기   
-                    result[residx++] = doc.data();
-                })
-                result.sort(function (a, b) {//최신순 정렬
-                    if (b.in_date > a.in_date) return 1;
-                    else if (b.in_date < a.in_date) return -1;
-                    else return 0;
-                })
                 result.sort(function (a, b) { //조회수 내림차순 정렬 
                     return b.views - a.views;
                 })
@@ -309,34 +278,35 @@ class PostStorage {
     }
         
 }
+//배열을 최신순으로 정렬해주는 함수
+function recentSort(array){
+    array.sort(function (a, b) {//최신순 정렬
+        if (b.in_date > a.in_date) return 1;
+        else if (b.in_date < a.in_date) return -1;
+        else return 0;
+    })
+    return array;
+}
 
-// async function getSearchPosts(categoryName, keyword) {
-//     var result = [];
-//     var residx = 0;
+async function getSearchPosts(categoryName, keyword) {
+    var result = [];
+    var residx = 0;
 
-//     var residx = 0;
-//     var postRef = db.collection("eduPost");
-//     var categoryRef = postRef.where("category", "==", categoryName);
+    var residx = 0;
+    var postRef = db.collection("eduPost");
+    var categoryRef = postRef.where("category", "==", categoryName);
 
-//     var searchRef = await categoryRef.orderBy("title").startAt(keyword).endAt(keyword + '\uf8ff').get();
+    var searchRef = await categoryRef.orderBy("title").startAt(keyword).endAt(keyword + '\uf8ff').get();
 
-//     if (searchRef.empty) {
-//         resolve({ success: true, msg: "검색된 게시물이 없습니다." }); //검색된 게시물이 없습니다.
-//     }
-
-//     searchRef.forEach(doc => {  //데이터 갖고오기   
-//         result[residx++] = doc.data();
-//     })
-//     return result;
-// }
+    searchRef.forEach(doc => {  //데이터 갖고오기   
+        result[residx++] = doc.data();
+    })
+    return result;
+}
 async function getPosts(categoryName) {
     var result = [];
     var residx = 0;
     var categoryRef = await db.collection("eduPost").where("category", "==", categoryName).get();
-
-    if (categoryRef.empty) {
-        resolve({ success: true, msg: categoryName + "카테고리에 속한 게시물이 없습니다." });
-    }
 
     categoryRef.forEach(doc => {  //데이터 갖고오기   
         result[residx++] = doc.data();
