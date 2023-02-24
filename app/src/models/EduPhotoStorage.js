@@ -19,7 +19,7 @@ class EduPhotoStorage{
                 .update({
                     eduPhotoID:eduPhotoRef.id, //필드에 postID추가
                 })
-                resolve({success:true});
+                resolve({success:true,eduPhotoID:eduPhotoRef.id});
             }catch(err){
                 reject(`${err}`);
             }
@@ -36,7 +36,7 @@ class EduPhotoStorage{
                 var queryRef =await eduPhotoRef.where("postID","==",postID).get();
             
                  if(queryRef.empty){
-                    resolve({success:true , msg: "No eduPhotos have been created."}); //작성된 교육사진이 없습니다.
+                    resolve({success:true , msg: "생성되지 않은 postID입니다."}); 
                 }
                 queryRef.forEach(doc=>{
                     result[residx++]=doc.data();
@@ -99,8 +99,16 @@ class EduPhotoStorage{
     static async deleteEduPhoto(eduPhotoID){
         return new Promise(async(resolve,reject)=>{
             try{
-                await db.collection("eduPhoto").doc(eduPhotoID).delete();
-                resolve({success:true});
+                let eduPhotoRef = await db.collection("eduPhoto").doc(eduPhotoID);
+                
+                if(await (await eduPhotoRef.get()).exists){
+                    eduPhotoRef.delete();
+                    resolve({success:true});
+                }
+                else{
+                    resolve({success:false, err:"생성되지 않은 eduPhotoID입니다."})
+                }
+                
             }catch(err){
                 reject(`${err}`);
             }
