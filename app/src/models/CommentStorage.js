@@ -127,7 +127,7 @@ class CommentStorage {
             try{
                 const comt_date = new Date().toLocaleString(); //게시글 등록 시 날짜 및 시간
                 // userName 가져오기
-                const userRef = db.collection("users").doc(postInfo.userID);
+                const userRef = db.collection("users").doc(commentInfo.userID);
                 const user = await userRef.get();
                 const userName = user.data().userName;
                 const commentJson={
