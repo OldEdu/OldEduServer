@@ -4,11 +4,25 @@ const db= require("../config/db");
 //EduPhotoStorage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 
 class EduPhotoStorage{
+    
+    //eduNum 찾기
+    static async findMaxImgNum(){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                const eduPhotoRef = db.collection("eduPhoto")
+                const maxImgNum = await eduPhotoRef.orderBy('imgNum').limit(1).get();
+                resolve(maxImgNum);
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
     //교육사진 작성
-    static async saveEduPhoto(eduPhotoInfo){
+    static async saveEduPhoto(eduPhotoInfo,imgNum){
         return new Promise(async(resolve, reject)=>{
             try{
                 const eduPhotoJson={  
+                    imgNum:imgNum,
                     postID:eduPhotoInfo.postID,
                     imgUrl:eduPhotoInfo.imgUrl,
                     voiceGuide:eduPhotoInfo.voiceGuide,
