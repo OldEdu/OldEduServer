@@ -13,7 +13,7 @@ class PostStorage {
         
                 await db.collection("eduPost").doc(postID)
                 .update({
-                    views: ++(post.data().views), //게시글 조회수1 증가  
+                    views: ++(post.data().views), //게시글 조회수1 증가
                 })
                 const response = await postRef.get();
 
@@ -59,6 +59,10 @@ class PostStorage {
                 const TIME_ZONE = 3240 * 10000; //한국과 시차 맞추기
                 const date = new Date();
                 const in_date = new Date(+date + TIME_ZONE).toISOString().replace('T', ' ').replace(/\..*/, ''); //게시글 등록 시 날짜 및 시간
+                // userName 가져오기
+                const userRef = db.collection("users").doc(postInfo.userID);
+                const user = await userRef.get();
+                const userName = user.data().userName;
                 const postJson = {                    //게시글 정보 
                     title: postInfo.title,
                     category: postInfo.category,
@@ -68,6 +72,7 @@ class PostStorage {
                     declaration: 0,
                     scrap:0,
                     userID: postInfo.userID,
+                    userName: userName,
                 }
                 const postRef = await db.collection("eduPost").add(postJson);
                 await db.collection("eduPost").doc(postRef.id)
