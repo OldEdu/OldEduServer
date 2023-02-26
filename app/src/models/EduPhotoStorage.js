@@ -10,8 +10,10 @@ class EduPhotoStorage{
         return new Promise(async(resolve,reject)=>{
             try{
                 const eduPhotoRef = db.collection("eduPhoto")
-                const maxImgNum = await eduPhotoRef.orderBy('imgNum').limit(1).get();
-                resolve(maxImgNum);
+                const maxImgNum = await eduPhotoRef.orderBy('imgNum','desc').limit(1).get();
+                maxImgNum.forEach(doc => {
+                    resolve(doc.data().imgNum);
+                });
             }catch(err){
                 reject(`${err}`);
             }
@@ -22,7 +24,7 @@ class EduPhotoStorage{
         return new Promise(async(resolve, reject)=>{
             try{
                 const eduPhotoJson={  
-                    imgNum:imgNum,
+                    imgNum: imgNum,
                     postID:eduPhotoInfo.postID,
                     imgUrl:eduPhotoInfo.imgUrl,
                     voiceGuide:eduPhotoInfo.voiceGuide,
