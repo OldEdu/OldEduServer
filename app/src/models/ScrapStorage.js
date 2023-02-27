@@ -53,6 +53,11 @@ class ScrapStorage {
     static async save(scrapInfo) {
         return new Promise(async(resolve,reject)=>{
             try{
+                const isPostRef = db.collection("eduPost");
+                const postQuery = await isPostRef.where("postID","in",[scrapInfo.postID]);
+                if(postQuery.empty){
+                    resolve({success:false, msg: "This post doesn't exist."}); 
+                }
                 const scrapJson={
                     userID : scrapInfo.userID,
                     postID : scrapInfo.postID
