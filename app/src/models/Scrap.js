@@ -16,7 +16,7 @@ class Scrap {
             const response = await userRef.get();
             return response.data().userType;
         }catch(err){
-            return {success:false, err};
+            return {success:false,err};
         }
     }
 
