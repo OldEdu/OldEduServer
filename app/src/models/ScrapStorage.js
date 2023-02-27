@@ -28,7 +28,8 @@ class ScrapStorage {
                 const userRef = db.collection("users");
                 const thisUserRef = db.collection("users").doc(userID);
                 const user = await thisUserRef.get();
-                if(user.data().userID === undefined){
+                const userQuery = await userRef.where('userID',"in",[userID]).get();
+                if(userQuery.empty){
                     resolve({success:false, msg:"Sorry, but we can't find information of this ID."});
                 }
                 if(user.data().userType === false){
