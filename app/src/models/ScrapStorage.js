@@ -25,9 +25,18 @@ class ScrapStorage {
                 var result = [];
                 var idx = 0;
                 const scrapRef = db.collection("scrap");
-                var queryRef =await scrapRef.where("userID","==",userID).get();
+                const userRef = db.collection("users");
+                const thisUserRef = db.collection("users").doc(userID);
+                const user = await thisUserRef.get();
+                if(user.data().userID === undefined){
+                    resolve({success:false, msg:"Sorry, but we can't find information of this ID."});
+                }
+                if(user.data().userType === false){
+                    resolve({success:false, msg:"You are not Student. So, You can't get Scrap List."});
+                }
+                var queryRef = await scrapRef.where("userID","==",userID).get();
                 if(queryRef.empty){
-                    resolve({success:true , msg: "You don't have any scrap."}); 
+                    resolve({success:true, msg: "You don't have any scrap."}); 
                 }
                 queryRef.forEach(doc=>{
                     result[idx++]=doc.data();

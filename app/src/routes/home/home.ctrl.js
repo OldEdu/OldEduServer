@@ -176,7 +176,7 @@ const process={
             return res.json(response);
         }
         else{
-            const response = {success:false , msg: "You are not Sutudent."};
+            const response = {success:false , msg: "Student ID doesn't exist."};
             return res.json(response);
         }
     },
