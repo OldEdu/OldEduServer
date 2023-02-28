@@ -24,10 +24,9 @@ router.get("/commentListUser/:userID",ctrl.output.commentListUser);
 router.get("/getComment/:comtID",ctrl.output.getComment);
 router.get("/upPostHeart/:postID",ctrl.output.upPostHeart);
 
-
 router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
-router.post("/profile/:userID",ctrl.process.profile);
+router.post("/profile",ctrl.process.profile);
 router.post("/createPost",ctrl.process.createPost);
 router.post("/updatePost",ctrl.process.updatePost);
 router.post("/createEduPhoto",ctrl.process.createEduPhoto);
