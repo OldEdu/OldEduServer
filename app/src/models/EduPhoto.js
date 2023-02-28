@@ -6,7 +6,7 @@ class EduPhoto{
     constructor(body){
         this.body=body;
     }
-    //imgNum 부여하기
+    //imgNum 찾기
     async findImgNum(){
         try{
             let imgNum = await EduPhotoStorage.findMaxImgNum();
@@ -17,11 +17,11 @@ class EduPhoto{
     }
 
      //교육사진 등록 기능
-     async createEduPhoto(){
+     async createEduPhoto(err,fields,files){
         const client =this.body;
         try{
-            const response = await EduPhotoStorage.saveEduPhoto(client,await this.findImgNum());
-            return response;
+            const response = await EduPhotoStorage.saveEduPhoto(err,fields,files,await this.findImgNum());
+            return {success: true,response };
         }catch(err){
             console.log(err);
             return {success: false,err };
