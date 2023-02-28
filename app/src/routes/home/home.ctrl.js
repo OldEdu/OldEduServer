@@ -258,9 +258,19 @@ const process={
 
     
     updateEduPhoto:async(req,res)=>{
-        const eduPhoto = new EduPhoto(req.body);
-        const response = await eduPhoto.updateEduPhoto();
-        return res.json(response);
+        try {
+            const form = new formidable.IncomingForm({ multiples: true });
+            form.parse(req, async (err, fields, files) => {
+                const eduPhoto = new EduPhoto(req.body);
+                const response = await eduPhoto.updateEduPhoto(err, fields, files);
+                return res.json(response);
+            });
+        } catch (err) {
+            res.send({
+            success: false,
+            error: err,
+            });
+        }
     },
     scrap:async(req,res)=>{        
         const userType = await new Scrap(req.body).getUserType(req.params.userID);
