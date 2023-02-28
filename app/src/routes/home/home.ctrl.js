@@ -172,9 +172,8 @@ const process={
             
                 if (err) {
                     return res.status(400).json({
-                    message: "There was an error parsing the files",
-                    data: {},
-                    error: err,
+                        success:false ,
+                        error:"There was an error parsing the files",
                     });
                 }
                 const bucket = storage.bucket("gs://oldedu-c93f3.appspot.com");
@@ -183,7 +182,6 @@ const process={
                 let imageNameArr= imageName.split('.');
                 imageNameArr[0]= fields.userID;
 
-                console.log(profileImage);
                 if (profileImage.size == 0) {
                     // do nothing
                 } else {
@@ -242,10 +240,23 @@ const process={
         return res.json(response);
     },
     createEduPhoto:async(req,res)=>{
-        const eduPhoto = new EduPhoto(req.body);
-        const response = await eduPhoto.createEduPhoto();
-        return res.json(response);
+        try {
+            const form = new formidable.IncomingForm({ multiples: true });
+
+            form.parse(req, async (err, fields, files) => {
+                const eduPhoto = new EduPhoto();
+                const response = await eduPhoto.createEduPhoto(err,fields,files);
+                return res.json(response);       
+            });
+        } catch (err) {
+            res.send({
+            success: false,
+            error: err,
+            });
+        }
     },
+
+    
     updateEduPhoto:async(req,res)=>{
         const eduPhoto = new EduPhoto(req.body);
         const response = await eduPhoto.updateEduPhoto();

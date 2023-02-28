@@ -1,6 +1,15 @@
 "use strict";
 
 const db= require("../config/db");
+const functions=require("firebase-functions");
+const {Storage} = require("@google-cloud/storage");
+const formidable = require("formidable-serverless");
+const UUID = require("uuid-v4");
+
+const storage = new Storage({
+  keyFilename: "key.json",
+});
+
 //EduPhotoStorage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 
 class EduPhotoStorage{
@@ -20,24 +29,65 @@ class EduPhotoStorage{
         })
     }
     //교육사진 작성
-    static async saveEduPhoto(eduPhotoInfo,imgNum){
+    static async saveEduPhoto(err,fields,files,imgNum){
         return new Promise(async(resolve, reject)=>{
-            try{
-                const eduPhotoJson={  
-                    imgNum: imgNum,
-                    postID:eduPhotoInfo.postID,
-                    imgUrl:eduPhotoInfo.imgUrl,
-                    voiceGuide:eduPhotoInfo.voiceGuide,
-                    textGuide:eduPhotoInfo.textGuide,
-                }
-                const eduPhotoRef= await db.collection("eduPhoto").add(eduPhotoJson);
-                await db.collection("eduPhoto").doc(eduPhotoRef.id)
-                .update({
-                    eduPhotoID:eduPhotoRef.id, //필드에 postID추가
-                })
-                resolve({success:true,eduPhotoID:eduPhotoRef.id});
-            }catch(err){
-                reject(`${err}`);
+            try {
+                    let uuid = UUID();
+                    var downLoadPath =
+                        "https://firebasestorage.googleapis.com/v0/b/oldedu-c93f3.appspot.com/o/";
+                        
+                    const eduPhotoImage = files.imgUrl;
+                    console.log(files.imgUrl)
+                    let imageUrl;
+                    if (err) {
+                        reject("There was an error parsing the files");
+                    }
+                    const bucket = storage.bucket("gs://oldedu-c93f3.appspot.com");
+                    
+                    const eduPhotoModel = {
+                        imgNum:imgNum,
+                        postID: fields.postID,
+                        textGuide: fields.textGuide,
+                        voiceGuide: fields.voiceGuide,
+                        
+                    };
+                    const eduPhotoRef= await db.collection("eduPhoto").add(eduPhotoModel);
+
+                    let imageName=eduPhotoImage.name;
+                    let imageNameArr= imageName.split('.');
+                    imageNameArr[0]= eduPhotoRef.id;
+
+                    if (eduPhotoImage.size == 0) {
+                        // do nothing
+                    } else {
+                        const imageResponse = await bucket.upload(eduPhotoImage.path, {
+                        destination: `eduPhoto/${imageNameArr[0]+"."+imageNameArr[1]}`,
+                        resumable: true,
+                        metadata: {
+                            metadata: {
+                            firebaseStorageDownloadTokens: uuid,
+                            },
+                        },
+                        });
+                        // profile image url
+                        imageUrl =
+                        downLoadPath +
+                        encodeURIComponent(imageResponse[0].name) +
+                        "?alt=media&token=" +
+                        uuid;
+                    }
+                    // object to send to database
+                    
+                    await db.collection("eduPhoto").doc(eduPhotoRef.id)
+                    .update({
+                        imgUrl: eduPhotoImage.size == 0 ? "" : imageUrl,
+                        eduPhotoID:eduPhotoRef.id, //필드에 eduPhotoId
+                    })
+                    
+                    resolve((await db.collection("eduPhoto").doc(eduPhotoRef.id).get()).data());
+            
+            } catch (err) {
+                reject(`${err}`)
             }
         })
     }
