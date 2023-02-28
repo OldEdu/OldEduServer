@@ -40,25 +40,23 @@ class TeacherStorage{
     }
 
 
-    //교육자 프로필 정보 저장하기 (닉네임, 프로필 정보, 프로필 사진)
-    static async saveProfile(profileInfo){
-        return new Promise(async(resolve,reject)=>{
-            try{
-                const userID=profileInfo.userID;
-                await db.collection("teachers").doc(userID)
-                .update({
-                    userName:profileInfo.userName,
-                    profileDesc:profileInfo.profileDesc,
-                    profilePicture:profileInfo.profilePicture,
-                    
-                })
-                
-                resolve({success:true});
-            } catch(error){
-                reject(`${error}`)
-            }     
-        })
-    }
+    // //교육자 프로필 정보 저장하기 (닉네임, 프로필 정보, 프로필 사진)
+    // static async saveProfile(profileInfo){
+    //     return new Promise(async(resolve,reject)=>{
+    //         try{
+    //             const userID=profileInfo.userID;
+    //             await db.collection("teachers").doc(userID)
+    //             .update({
+    //                 userName:profileInfo.userName,
+    //                 profileDesc:profileInfo.profileDesc,
+    //                 profilePicture:profileInfo.profilePicture,
+    //             })
+    //             resolve({success:true});
+    //         } catch(error){
+    //             reject(`${error}`)
+    //         }     
+    //     })
+    // }
 
 
 
