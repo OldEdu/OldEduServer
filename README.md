@@ -1,6 +1,8 @@
 # OldEduServer
 OldEduServer를 위한 레퍼지토리입니다.
 
+OldEdu API문서, DB정보: https://www.notion.so/API-DB-569184d00e2046519ef888b8b948192c
+
 ## 커밋 유형 지정
 
 FEAT : 새로운 기능의 추가 <br>
