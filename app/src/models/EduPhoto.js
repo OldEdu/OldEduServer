@@ -29,10 +29,10 @@ class EduPhoto{
 
      }
      //교육사진 수정하기 기능
-    async updateEduPhoto(){
+    async updateEduPhoto(err,fields,files){
         const client =this.body;
         try{
-            const response = await EduPhotoStorage.updateEduPhoto(client);
+            const response = await EduPhotoStorage.updateEduPhoto(err,fields,files);
             return response
         }catch(err){
             return {success:false,err};
