@@ -54,27 +54,29 @@ class ScrapStorage {
         return new Promise(async(resolve,reject)=>{
             try{
                 const isPostRef = db.collection("eduPost");
-                const postQuery = await isPostRef.where("postID","in",[scrapInfo.postID]);
-                if(postQuery.empty){
-                    resolve({success:false, msg: "This post doesn't exist."}); 
+                const isPostQuery = await isPostRef.where('postID','in',[scrapInfo.postID]).get();
+                if(isPostQuery.empty){
+                    resolve({success:false,msg:"This post doesn't exist."});
                 }
-                const scrapJson={
-                    userID : scrapInfo.userID,
-                    postID : scrapInfo.postID
-                };
-                const res = await db.collection("scrap").add(scrapJson);
-                await db.collection("scrap").doc(res.id)
-                .update({
-                    scrapID:res.id,    
-                })
-
-                const postRef = db.collection("eduPost").doc(scrapInfo.postID);
-                const post = await postRef.get();
-                await db.collection("eduPost").doc(scrapInfo.postID)
-                .update({
-                    scrap: ++(post.data().scrap),
-                })
-                resolve({success:true});
+                else{
+                    const scrapJson={
+                        userID : scrapInfo.userID,
+                        postID : scrapInfo.postID
+                    };
+                    const res = await db.collection("scrap").add(scrapJson);
+                    await db.collection("scrap").doc(res.id)
+                    .update({
+                        scrapID:res.id,    
+                    })
+    
+                    const postRef = db.collection("eduPost").doc(scrapInfo.postID);
+                    const post = await postRef.get();
+                    await db.collection("eduPost").doc(scrapInfo.postID)
+                    .update({
+                        scrap: ++(post.data().scrap),
+                    })
+                    resolve({success:true});
+                }
             } catch(error){
                 reject(`${err}`)
             }     
