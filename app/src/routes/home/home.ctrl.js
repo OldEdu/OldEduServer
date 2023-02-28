@@ -1,5 +1,5 @@
 "use strict"
-const db = require("../../config/db");
+
 const User = require("../../models/User");
 const Teacher = require("../../models/Teacher");
 const Student = require("../../models/Student");
@@ -7,7 +7,17 @@ const Post = require("../../models/Post");
 const EduPhoto = require("../../models/EduPhoto");
 const Comment = require("../../models/Comment");
 const Scrap = require("../../models/Scrap");
-const { response } = require("express");
+const db = require("../../config/db");
+const functions=require("firebase-functions");
+const {Storage} = require("@google-cloud/storage");
+const teachersRef = db.collection("teachers");
+const formidable = require("formidable-serverless");
+const UUID = require("uuid-v4");
+
+const storage = new Storage({
+  keyFilename: "key.json",
+});
+
 
 const output={
     home : (req,res)=>{
@@ -144,10 +154,83 @@ const process={
         return res.json(response);
     },
     profile:async (req,res)=>{
-        const teacher= new Teacher(req.body);
-        const response=await teacher.updateProfile();
-        return res.json(response);
-    },
+        // const teacher= new Teacher(req.body);
+        // const response=await teacher.updateProfile();
+        // return res.json(response);
+        const form = new formidable.IncomingForm({ multiples: true });
+
+        try {
+            form.parse(req, async (err, fields, files) => {
+                let uuid = UUID();
+                var downLoadPath =
+                    "https://firebasestorage.googleapis.com/v0/b/oldedu-c93f3.appspot.com/o/";
+                    
+                const profileImage = files.profileImage;
+                
+                // url of the uploaded image
+                let imageUrl;
+            
+                if (err) {
+                    return res.status(400).json({
+                    message: "There was an error parsing the files",
+                    data: {},
+                    error: err,
+                    });
+                }
+                const bucket = storage.bucket("gs://oldedu-c93f3.appspot.com");
+                
+                let imageName=profileImage.name;
+                let imageNameArr= imageName.split('.');
+                imageNameArr[0]= fields.userID;
+
+                console.log(profileImage);
+                if (profileImage.size == 0) {
+                    // do nothing
+                } else {
+                    const imageResponse = await bucket.upload(profileImage.path, {
+                    destination: `teacher/${imageNameArr[0]+"."+imageNameArr[1]}`,
+                    resumable: true,
+                    metadata: {
+                        metadata: {
+                        firebaseStorageDownloadTokens: uuid,
+                        },
+                    },
+                    });
+                    // profile image url
+                    imageUrl =
+                    downLoadPath +
+                    encodeURIComponent(imageResponse[0].name) +
+                    "?alt=media&token=" +
+                    uuid;
+                }
+                // object to send to database
+                const teacherModel = {
+                    userID: fields.userID,
+                    userName: fields.userName,
+                    profileDesc: fields.profileDesc,
+                    profileImage: profileImage.size == 0 ? "" : imageUrl,
+                };
+            
+                await teachersRef
+                    .doc(fields.userID)
+                    .set(teacherModel, { merge: true })
+                    .then((value) => {
+                    // return response to users
+                    res.status(200).send({
+                        success: true,
+                        result: teacherModel,
+                    });
+                    });
+                });
+            } catch (err) {
+                res.send({
+                success: false,
+                error: err,
+                });
+            }
+      
+      }
+    ,
     createPost:async(req,res)=>{
         const post = new Post(req.body);
         const response = await post.createPost();
@@ -190,6 +273,11 @@ const process={
         const response = await comment.updateComment();
         return res.json(response);
     }
+
+
+
+
+
 };
 
 module.exports={
