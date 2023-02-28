@@ -5,7 +5,7 @@ const db= require("../config/db");
 
 class EduPhotoStorage{
     
-    //eduNum 찾기
+    //eduNum 최대값 찾기
     static async findMaxImgNum(){
         return new Promise(async(resolve,reject)=>{
             try{
@@ -58,9 +58,9 @@ class EduPhotoStorage{
                     result[residx++]=doc.data();
                 })
 
-                result.sort(function(a,b){//생성 순으로 정렬
-                    if(a.eduPhotoID>b.eduPhotoID)return 1;
-                    else if(a.eduPhotoID<b.eduPhotoID) return -1;
+                result.sort(function(a,b){//imgNum 오름차순으로 정렬
+                    if(a.imgNum>b.imgNum)return 1;
+                    else if(a.imgNum<b.imgNum) return -1;
                     else return 0;
                 })
 
