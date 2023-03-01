@@ -164,7 +164,7 @@ const process={
                 let uuid = UUID();
                 var downLoadPath =
                     "https://firebasestorage.googleapis.com/v0/b/oldedu-c93f3.appspot.com/o/";
-                    
+                
                 const profileImage = files.profileImage;
                 
                 // url of the uploaded image

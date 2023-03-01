@@ -21,7 +21,7 @@ class EduPhoto{
         const client =this.body;
         try{
             const response = await EduPhotoStorage.saveEduPhoto(err,fields,files,await this.findImgNum());
-            return {success: true,response };
+            return {success: true,result:response };
         }catch(err){
             console.log(err);
             return {success: false,err };
@@ -33,7 +33,7 @@ class EduPhoto{
         const client =this.body;
         try{
             const response = await EduPhotoStorage.updateEduPhoto(err,fields,files);
-            return response
+            return {success: true,result:response };
         }catch(err){
             return {success:false,err};
         }
