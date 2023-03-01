@@ -132,6 +132,8 @@ class CommentStorage {
                 const userRef = db.collection("users").doc(commentInfo.userID);
                 const user = await userRef.get();
                 const userName = user.data().userName;
+                // eduPost의 comment up
+
                 const commentJson={
                     postID : commentInfo.postID,
                     userID : commentInfo.userID,
@@ -143,6 +145,12 @@ class CommentStorage {
                 await db.collection("comment").doc(res.id)
                 .update({
                     comtID:res.id,
+                })
+                const postRef = db.collection("eduPost").doc(commentInfo.postID);
+                const post = await postRef.get();
+                await db.collection("eduPost").doc(commentInfo.postID)
+                .update({
+                    comment: ++(post.data().comment),
                 })
                 resolve({success:true});
             }catch(err){

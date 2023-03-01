@@ -71,6 +71,7 @@ class PostStorage {
                     heart: 0,
                     declaration: 0,
                     scrap:0,
+                    comment:0,
                     userID: postInfo.userID,
                     userName: userName,
                 }
