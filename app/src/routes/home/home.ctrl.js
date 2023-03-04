@@ -154,79 +154,9 @@ const process={
         return res.json(response);
     },
     profile:async (req,res)=>{
-        // const teacher= new Teacher(req.body);
-        // const response=await teacher.updateProfile();
-        // return res.json(response);
-        const form = new formidable.IncomingForm({ multiples: true });
-
-        try {
-            form.parse(req, async (err, fields, files) => {
-                let uuid = UUID();
-                var downLoadPath =
-                    "https://firebasestorage.googleapis.com/v0/b/oldedu-c93f3.appspot.com/o/";
-                
-                const profileImage = files.profileImage;
-                
-                // url of the uploaded image
-                let imageUrl;
-            
-                if (err) {
-                    return res.status(400).json({
-                        success:false ,
-                        error:"There was an error parsing the files",
-                    });
-                }
-                const bucket = storage.bucket("gs://oldedu-c93f3.appspot.com");
-                
-                let imageName=profileImage.name;
-                let imageNameArr= imageName.split('.');
-                imageNameArr[0]= fields.userID;
-
-                if (profileImage.size == 0) {
-                    // do nothing
-                } else {
-                    const imageResponse = await bucket.upload(profileImage.path, {
-                    destination: `teacher/${imageNameArr[0]+"."+imageNameArr[1]}`,
-                    resumable: true,
-                    metadata: {
-                        metadata: {
-                        firebaseStorageDownloadTokens: uuid,
-                        },
-                    },
-                    });
-                    // profile image url
-                    imageUrl =
-                    downLoadPath +
-                    encodeURIComponent(imageResponse[0].name) +
-                    "?alt=media&token=" +
-                    uuid;
-                }
-                // object to send to database
-                const teacherModel = {
-                    userID: fields.userID,
-                    userName: fields.userName,
-                    profileDesc: fields.profileDesc,
-                    profileImage: profileImage.size == 0 ? "" : imageUrl,
-                };
-            
-                await teachersRef
-                    .doc(fields.userID)
-                    .set(teacherModel, { merge: true })
-                    .then((value) => {
-                    // return response to users
-                    res.status(200).send({
-                        success: true,
-                        result: teacherModel,
-                    });
-                    });
-                });
-            } catch (err) {
-                res.send({
-                success: false,
-                error: err,
-                });
-            }
-      
+        const teacher= new Teacher(req.body);
+        const response=await teacher.updateProfile();
+        return res.json(response);
       }
     ,
     createPost:async(req,res)=>{
@@ -240,37 +170,14 @@ const process={
         return res.json(response);
     },
     createEduPhoto:async(req,res)=>{
-        try {
-            const form = new formidable.IncomingForm({ multiples: true });
-
-            form.parse(req, async (err, fields, files) => {
-                const eduPhoto = new EduPhoto();
-                const response = await eduPhoto.createEduPhoto(err,fields,files);
-                return res.json(response);       
-            });
-        } catch (err) {
-            res.send({
-            success: false,
-            error: err,
-            });
-        }
+        const eduPhoto = new EduPhoto(req.body);
+        const response = await eduPhoto.createEduPhoto();
+        return res.json(response);
     },
-
-    
     updateEduPhoto:async(req,res)=>{
-        try {
-            const form = new formidable.IncomingForm({ multiples: true });
-            form.parse(req, async (err, fields, files) => {
-                const eduPhoto = new EduPhoto(req.body);
-                const response = await eduPhoto.updateEduPhoto(err, fields, files);
-                return res.json(response);
-            });
-        } catch (err) {
-            res.send({
-            success: false,
-            error: err,
-            });
-        }
+        const eduPhoto = new EduPhoto(req.body);
+        const response = await eduPhoto.updateEduPhoto();
+        return res.json(response);
     },
     scrap:async(req,res)=>{        
         const userType = await new Scrap(req.body).getUserType(req.params.userID);
