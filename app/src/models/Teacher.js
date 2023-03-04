@@ -30,7 +30,6 @@ class Teacher {
     //교육자 프로필 수정하기
     async updateProfile(){
         const client = this.body;
-        console.log(client);
         try{
             const response = await TeacherStorage.saveProfile(client);
             return response;
