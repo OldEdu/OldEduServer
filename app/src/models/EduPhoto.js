@@ -17,11 +17,11 @@ class EduPhoto{
     }
 
      //교육사진 등록 기능
-     async createEduPhoto(err,fields,files){
+     async createEduPhoto(){
         const client =this.body;
         try{
-            const response = await EduPhotoStorage.saveEduPhoto(err,fields,files,await this.findImgNum());
-            return {success: true,result:response };
+            const response = await EduPhotoStorage.saveEduPhoto(client,await this.findImgNum());
+            return response;
         }catch(err){
             console.log(err);
             return {success: false,err };
@@ -29,11 +29,11 @@ class EduPhoto{
 
      }
      //교육사진 수정하기 기능
-    async updateEduPhoto(err,fields,files){
+     async updateEduPhoto(){
         const client =this.body;
         try{
-            const response = await EduPhotoStorage.updateEduPhoto(err,fields,files);
-            return {success: true,result:response };
+            const response = await EduPhotoStorage.updateEduPhoto(client);
+            return response
         }catch(err){
             return {success:false,err};
         }

@@ -29,65 +29,24 @@ class EduPhotoStorage{
         })
     }
     //교육사진 작성
-    static async saveEduPhoto(err,fields,files,imgNum){
+    static async saveEduPhoto(eduPhotoInfo,imgNum){
         return new Promise(async(resolve, reject)=>{
-            try {
-                    let uuid = UUID();
-                    var downLoadPath =
-                        "https://firebasestorage.googleapis.com/v0/b/oldedu-c93f3.appspot.com/o/";
-                        
-                    const eduPhotoImage = files.imgUrl;
-        
-                    let imageUrl;
-                    if (err) {
-                        reject("There was an error parsing the files");
-                    }
-                    const bucket = storage.bucket("gs://oldedu-c93f3.appspot.com");
-                    
-                    const eduPhotoModel = {
-                        imgNum:imgNum,
-                        postID: fields.postID,
-                        textGuide: fields.textGuide,
-                        voiceGuide: fields.voiceGuide,
-                        
-                    };
-                    const eduPhotoRef= await db.collection("eduPhoto").add(eduPhotoModel);
-
-                    let imageName=eduPhotoImage.name;
-                    let imageNameArr= imageName.split('.');
-                    imageNameArr[0]= eduPhotoRef.id;
-
-                    if (eduPhotoImage.size == 0) {
-                        // do nothing
-                    } else {
-                        const imageResponse = await bucket.upload(eduPhotoImage.path, {
-                        destination: `eduPhoto/${imageNameArr[0]+"."+imageNameArr[1]}`,
-                        resumable: true,
-                        metadata: {
-                            metadata: {
-                            firebaseStorageDownloadTokens: uuid,
-                            },
-                        },
-                        });
-                        // profile image url
-                        imageUrl =
-                        downLoadPath +
-                        encodeURIComponent(imageResponse[0].name) +
-                        "?alt=media&token=" +
-                        uuid;
-                    }
-                    // object to send to database
-                    
-                    await db.collection("eduPhoto").doc(eduPhotoRef.id)
-                    .update({
-                        imgUrl: eduPhotoImage.size == 0 ? "" : imageUrl,
-                        eduPhotoID:eduPhotoRef.id, //필드에 eduPhotoId
-                    })
-                    
-                    resolve((await db.collection("eduPhoto").doc(eduPhotoRef.id).get()).data());
-            
-            } catch (err) {
-                reject(`${err}`)
+            try{
+                const eduPhotoJson={  
+                    imgNum: imgNum,
+                    postID:eduPhotoInfo.postID,
+                    imgUrl:eduPhotoInfo.imgUrl,
+                    voiceGuide:eduPhotoInfo.voiceGuide,
+                    textGuide:eduPhotoInfo.textGuide,
+                }
+                const eduPhotoRef= await db.collection("eduPhoto").add(eduPhotoJson);
+                await db.collection("eduPhoto").doc(eduPhotoRef.id)
+                .update({
+                    eduPhotoID:eduPhotoRef.id, //필드에 postID추가
+                })
+                resolve({success:true});
+            }catch(err){
+                reject(`${err}`);
             }
         })
     }
@@ -146,58 +105,20 @@ class EduPhotoStorage{
 
     }
     //eduPhotoID로 교육사진 수정
-    static async updateEduPhoto(err,fields,files){
+    static async updateEduPhoto(eduPhotoInfo){
         return new Promise(async(resolve,reject)=>{
-            try {
-                let uuid = UUID();
-                var downLoadPath =
-                    "https://firebasestorage.googleapis.com/v0/b/oldedu-c93f3.appspot.com/o/";
-                    
-                const eduPhotoImage = files.imgUrl;
-                let imageUrl;
-                if (err) {
-                    reject("There was an error parsing the files");
-                }
-                const bucket = storage.bucket("gs://oldedu-c93f3.appspot.com");
-    
-                let imageName=eduPhotoImage.name;
-                let imageNameArr= imageName.split('.');
-                imageNameArr[0]= fields.eduPhotoID;
-    
-                if (eduPhotoImage.size == 0) {
-                    // do nothing
-                } else {
-                    const imageResponse = await bucket.upload(eduPhotoImage.path, {
-                    destination: `eduPhoto/${imageNameArr[0]+"."+imageNameArr[1]}`,
-                    resumable: true,
-                    metadata: {
-                        metadata: {
-                        firebaseStorageDownloadTokens: uuid,
-                        },
-                    },
-                    });
-                    // profile image url
-                    imageUrl =
-                    downLoadPath +
-                    encodeURIComponent(imageResponse[0].name) +
-                    "?alt=media&token=" +
-                    uuid;
-                }
-                // object to send to database
-                await db.collection("eduPhoto").doc(fields.eduPhotoID)
+            try{
+                await db.collection("eduPhoto").doc(eduPhotoInfo.eduPhotoID)
                 .update({
-                    imgUrl: eduPhotoImage.size == 0 ? "" : imageUrl,
-                    voiceGuide:fields.voiceGuide,
-                    textGuide:fields.textGuide,
+                    imgUrl:eduPhotoInfo.imgUrl,
+                    voiceGuide:eduPhotoInfo.voiceGuide,
+                    textGuide:eduPhotoInfo.textGuide,
                 })
-                
-                resolve((await db.collection("eduPhoto").doc(fields.eduPhotoID).get()).data());
-        
-        } catch (err) {
-            reject(`${err}`)
-        }
+                resolve({success:true});
+            }catch(err){
+                reject(`${err}`);
+            }
         })
-
     }
     //eduPhotoID로 교육사진 삭제
     static async deleteEduPhoto(eduPhotoID){
