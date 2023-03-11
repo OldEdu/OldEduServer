@@ -22,7 +22,6 @@ router.get("/getScrapList/:userID",ctrl.output.getScrapList);
 router.get("/commentListPost/:postID",ctrl.output.commentListPost);
 router.get("/commentListUser/:userID",ctrl.output.commentListUser);
 router.get("/getComment/:comtID",ctrl.output.getComment);
-router.get("/upPostHeart/:postID",ctrl.output.upPostHeart);
 
 router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
@@ -31,6 +30,7 @@ router.post("/createPost",ctrl.process.createPost);
 router.post("/updatePost",ctrl.process.updatePost);
 router.post("/createEduPhoto",ctrl.process.createEduPhoto);
 router.post("/updateEduPhoto",ctrl.process.updateEduPhoto);
+router.post("/upPostHeart",ctrl.process.upPostHeart);
 router.post("/scrap",ctrl.process.scrap);
 router.post("/writeComment",ctrl.process.writeComment);
 router.post("/updateComment",ctrl.process.updateComment);

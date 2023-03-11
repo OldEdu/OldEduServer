@@ -124,10 +124,21 @@ class Post {
             return { success: false, err };
         }
     }
+    // UserType
+    async getUserType(){
+        const client = this.body
+        try{
+            const userRef = db.collection("users").doc(client.userID);
+            const response = await userRef.get();
+            return response.data().userType;
+        }catch(err){
+            return {success:false,err};
+        }
+    }
     // 게시글 하트수 올리기
     async upPostHeart(){
+        const client = this.body;
         try {
-            const client = this.body;
             const response = await PostStorage.updatePostHeart(client);
             return response;
         } catch (err) {
