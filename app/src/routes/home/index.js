@@ -39,6 +39,6 @@ router.delete("/deletePost/:postID",ctrl.output.deletePost);
 router.delete("/deleteEduPhoto/:eduPhotoID",ctrl.output.deleteEduPhoto);
 router.delete("/deleteScrap/:scrapID",ctrl.output.deleteScrap);
 router.delete("/deleteComment/:comtID",ctrl.output.deleteComment);
-
+router.delete("/deleteHeart/:heartID",ctrl.output.deleteHeart);
 
 module.exports=router;

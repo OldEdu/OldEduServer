@@ -134,8 +134,13 @@ const output={
         const comment = new Comment();
         const response = await comment.deleteComment(req.params.comtID);
         res.send(response);
+    },
+    deleteHeart:async(req,res)=>{
+        const heart = new Post();
+        const response = await heart.deleteHeart(req.params.heartID);
+        res.send(response);
     }
-}
+};
 
 const process={
     login:async (req,res)=>{
@@ -175,16 +180,9 @@ const process={
         return res.json(response);
     },
     upPostHeart:async(req,res)=>{
-        const userType = await new Post(req.body).getUserType(req.params.userID);
-        if(userType === true){
-            const post = new Post(req.body);
-            const response = await post.upPostHeart();
-            return res.json(response);
-        }
-        else{
-            const response = {success:false , msg: "Teacher can't send heart."};
-            return res.json(response);
-        }
+        const post = new Post(req.body);
+        const response = await post.upPostHeart();
+        return res.json(response);
     },
     scrap:async(req,res)=>{        
         const userType = await new Scrap(req.body).getUserType(req.params.userID);
