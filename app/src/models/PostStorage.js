@@ -248,13 +248,26 @@ class PostStorage {
         })
     }
     // 게시글,게시글 작성한 교육자 하트수 올리기
-    static async updatePostHeart(postID){
+    static async updatePostHeart(heartInfo){
         return new Promise(async (resolve, reject) => {
             try {
-                var postRef = db.collection("eduPost").doc(postID);
+                // *** heartDB에 저장 *** //
+                const heartJson = {                   
+                    postID: heartInfo.postID,
+                    userID: heartInfo.userID,
+                }
+                console.log(heartJson);
+                const heartRef = await db.collection("heart").add(heartJson);
+                await db.collection("heart").doc(heartRef.id)
+                .update({
+                    heartID: heartRef.id,
+                })
+                console.log((await heartRef.get()).data());
+                // eduPost DB에 하트수 올리기
+                var postRef = db.collection("eduPost").doc(heartInfo.postID);
                 const post = await postRef.get();
 
-                await db.collection("eduPost").doc(postID)
+                await db.collection("eduPost").doc(heartInfo.postID)
                 .update({
                     heart: ++(post.data().heart), //게시글 하트수 1개 증가  
                 })

@@ -87,11 +87,6 @@ const output={
         const response = await post.readViewsPostAll(req.params.category);
         res.send(response);
     },
-    upPostHeart:async(req,res)=>{
-        const post=new Post(req.params.postID);
-        const response = await post.upPostHeart();
-        res.send(response);
-    },
     searchRecentPosts:async(req,res)=>{
         const post=new Post();
         const response = await post.readSearchRecentPostAll(req.params.category,req.query.keyword);
@@ -178,6 +173,18 @@ const process={
         const eduPhoto = new EduPhoto(req.body);
         const response = await eduPhoto.updateEduPhoto();
         return res.json(response);
+    },
+    upPostHeart:async(req,res)=>{
+        const userType = await new Post(req.body).getUserType(req.params.userID);
+        if(userType === true){
+            const post = new Post(req.body);
+            const response = await post.upPostHeart();
+            return res.json(response);
+        }
+        else{
+            const response = {success:false , msg: "Teacher can't send heart."};
+            return res.json(response);
+        }
     },
     scrap:async(req,res)=>{        
         const userType = await new Scrap(req.body).getUserType(req.params.userID);
