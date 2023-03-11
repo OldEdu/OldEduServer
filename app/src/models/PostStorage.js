@@ -256,13 +256,11 @@ class PostStorage {
                     postID: heartInfo.postID,
                     userID: heartInfo.userID,
                 }
-                console.log(heartJson);
                 const heartRef = await db.collection("heart").add(heartJson);
                 await db.collection("heart").doc(heartRef.id)
                 .update({
                     heartID: heartRef.id,
                 })
-                console.log((await heartRef.get()).data());
                 // eduPost DB에 하트수 올리기
                 var postRef = db.collection("eduPost").doc(heartInfo.postID);
                 const post = await postRef.get();
@@ -284,13 +282,37 @@ class PostStorage {
 
                 resolve(response.data()); //하트 수 1증가 된 게시글 리턴
                 
-        } catch (err) {
-            reject(`${err}`);
-        }
-    })
-    
+            } catch (err) {
+                reject(`${err}`);
+            }
+        })
     }
-        
+    
+    // 하트 감소하기
+    static async reducePostHeart(heartID){
+        return new Promise(async (resolve, reject) => {
+            try{
+                const heartRef = db.collection("heart").doc(heartID);
+                const heart = await heartRef.get();
+
+                const postID = heart.data().postID;
+                const postRef = db.collection("eduPost").doc(postID);
+                const post = await postRef.get();
+                const heartCount = post.data().heart;
+                // eduPost의 scrap이 0 이하인 경우에는 -1을하지 못하도록 함
+                if (heartCount > 0) {
+                    await db.collection("eduPost").doc(postID)
+                    .update({
+                        heart: --(post.data().heart),
+                    })
+                }
+                await db.collection("heart").doc(heartID).delete();
+                resolve({success:true});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
 }
 //배열을 최신순으로 정렬해주는 함수
 function recentSort(array){
