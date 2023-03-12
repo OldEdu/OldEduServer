@@ -315,25 +315,37 @@ class PostStorage {
         })
     }
 
-    // static async returnViewHeart(postInfo){
-    //     return new Promise(async(resolve, reject)=>{
-    //         try{
-    //             const heartOnClicked = false;
-    //             const heartRef = db.collection("heart").where("postID", "==", postInfo.postID).get();
-    //             heartRef.forEach(doc=>{
-    //                 if(doc.data().userID === postInfo.userID) {heartOnClicked = true;}
-    //             })
-    //             const scrapOnClicked = false;
-    //             const scrapRef = db.collection("scrap").where("postID", "==", postInfo.postID).get();
-    //             scrapRef.forEach(doc=>{
-    //                 if(doc.data().userID === postInfo.userID) {scrapOnClicked = true;}
-    //             })
-    //             resolve({heartOnClicked:heartOnClicked,scrapOnClicked:scrapOnClicked});
-    //         }catch{
-    //             reject(`${err}`);
-    //         }
-    //     })
-    // }
+    static async returnViewHeart(postInfo){
+        return new Promise(async(resolve, reject)=>{
+            try{
+                const heartRef = await db.collection("heart").where("postID", "==", postInfo.postID).get();
+                const scrapRef = await db.collection("scrap").where("postID", "==", postInfo.postID).get();
+                heartRef.forEach((heart) => {
+                    // 아래의 조건문에 걸리면 heart가 ture
+                    if(heart.data().userID === postInfo.userID){
+                        scrapRef.forEach((scrap) => {
+                            // heart = true, scrap = true
+                            if(scrap.data().userID === postInfo.userID){
+                                resolve({heartOnClicked:true,scrapOnClicked:true});
+                            }
+                        })
+                        //해당 if문 안에는 존재하지만 scrap루프는 빠져나왔으므로 heart = true, scrap = false
+                        resolve({heartOnClicked:true,scrapOnClicked:false});
+                    }
+                });
+                // heart = false인 경우는 루프 탈출이므로
+                scrapRef.forEach((scrap) => {
+                    if(scrap.data().userID === postInfo.userID){
+                        resolve({heartOnClicked:false,scrapOnClicked:true});
+                    }
+                })
+                // 어떤 조건문(if문)에도 걸리지 않으면 전부 false
+                resolve({heartOnClicked:false,scrapOnClicked:false});
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
 }
 //배열을 최신순으로 정렬해주는 함수
 function recentSort(array){

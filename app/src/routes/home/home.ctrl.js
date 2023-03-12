@@ -206,11 +206,11 @@ const process={
         const response = await comment.updateComment();
         return res.json(response);
     },
-    // returnViewHeart:async(req,res)=>{
-    //     const post = new Post(req.body);
-    //     const response = await post.returnViewHeart();
-    //     return res.json(response);
-    // }
+    returnViewHeart:async(req,res)=>{
+        const post = new Post(req.body);
+        const response = await post.returnViewHeart();
+        return res.json(response);
+    }
 
 };
 
