@@ -1,5 +1,6 @@
 "use strict";
 
+const { resolve } = require("path");
 const db = require("../config/db");
 //PostStorage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 class PostStorage {
@@ -313,6 +314,26 @@ class PostStorage {
             }
         })
     }
+
+    // static async returnViewHeart(postInfo){
+    //     return new Promise(async(resolve, reject)=>{
+    //         try{
+    //             const heartOnClicked = false;
+    //             const heartRef = db.collection("heart").where("postID", "==", postInfo.postID).get();
+    //             heartRef.forEach(doc=>{
+    //                 if(doc.data().userID === postInfo.userID) {heartOnClicked = true;}
+    //             })
+    //             const scrapOnClicked = false;
+    //             const scrapRef = db.collection("scrap").where("postID", "==", postInfo.postID).get();
+    //             scrapRef.forEach(doc=>{
+    //                 if(doc.data().userID === postInfo.userID) {scrapOnClicked = true;}
+    //             })
+    //             resolve({heartOnClicked:heartOnClicked,scrapOnClicked:scrapOnClicked});
+    //         }catch{
+    //             reject(`${err}`);
+    //         }
+    //     })
+    // }
 }
 //배열을 최신순으로 정렬해주는 함수
 function recentSort(array){
