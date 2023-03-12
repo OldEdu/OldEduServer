@@ -66,7 +66,11 @@ const output={
         const response = await post.deletePost(req.params.postID);
         res.send(response);
     },
-
+    getEduPhoto:async(req,res)=>{
+        const eduPhoto=new EduPhoto(req.params.eduPhotoID);
+        const response = await eduPhoto.readEduPhoto();
+        res.send(response);
+    },
     deleteEduPhoto:async(req,res)=>{
         const eduPhoto=new EduPhoto();
         const response = await eduPhoto.deleteEduPhoto(req.params.eduPhotoID);
