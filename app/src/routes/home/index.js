@@ -22,6 +22,7 @@ router.get("/getScrapList/:userID",ctrl.output.getScrapList);
 router.get("/commentListPost/:postID",ctrl.output.commentListPost);
 router.get("/commentListUser/:userID",ctrl.output.commentListUser);
 router.get("/getComment/:comtID",ctrl.output.getComment);
+router.get("/getEduPhoto/:eduPhotoID",ctrl.output.getEduPhoto);
 
 router.post("/login",ctrl.process.login);
 router.post("/register",ctrl.process.register);
