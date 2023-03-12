@@ -139,5 +139,25 @@ class EduPhotoStorage{
             }
         })
     }
+
+    //eduPhotoID로 교육사진 정보 불러오기
+    static async getEduPhoto(eduPhotoID){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                let eduPhotoRef = await db.collection("eduPhoto").doc(eduPhotoID);
+                console.log(await (await eduPhotoRef.get()).data())
+                
+                if(await (await eduPhotoRef.get()).exists){
+                    resolve({success:true,eduPhotoResponse:(await eduPhotoRef.get()).data()});
+                }
+                else{
+                    resolve({success:false, err:"생성되지 않은 eduPhotoID입니다."})
+                }
+                
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
 }
 module.exports=EduPhotoStorage
