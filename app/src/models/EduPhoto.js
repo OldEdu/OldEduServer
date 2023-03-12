@@ -67,6 +67,17 @@ class EduPhoto{
             return {succrss: false,err};
         }
     }
+    //eduPhotoID로 eduPhotoID 정보 불러오기
+    async readEduPhoto(eduPhotoID){
+        const client =this.body;
+        console.log(client)
+        try{
+            const response = await EduPhotoStorage.getEduPhoto(client); //eduPhotoID 받음
+            return response;
+        }catch(err){
+            return {succrss: false,err};
+        }
+    }
 }
 
 module.exports=EduPhoto
