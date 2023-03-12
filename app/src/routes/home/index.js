@@ -34,6 +34,7 @@ router.post("/upPostHeart",ctrl.process.upPostHeart);
 router.post("/scrap",ctrl.process.scrap);
 router.post("/writeComment",ctrl.process.writeComment);
 router.post("/updateComment",ctrl.process.updateComment);
+// router.post("/returnViewHeart",ctrl.process.returnViewHeart);
 
 router.delete("/deletePost/:postID",ctrl.output.deletePost);
 router.delete("/deleteEduPhoto/:eduPhotoID",ctrl.output.deleteEduPhoto);

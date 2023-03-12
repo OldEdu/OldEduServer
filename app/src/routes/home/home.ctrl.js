@@ -139,7 +139,7 @@ const output={
         const heart = new Post();
         const response = await heart.deleteHeart(req.params.heartID);
         res.send(response);
-    }
+    },
 };
 
 const process={
@@ -205,11 +205,12 @@ const process={
         const comment = new Comment(req.body);
         const response = await comment.updateComment();
         return res.json(response);
-    }
-
-
-
-
+    },
+    // returnViewHeart:async(req,res)=>{
+    //     const post = new Post(req.body);
+    //     const response = await post.returnViewHeart();
+    //     return res.json(response);
+    // }
 
 };
 

@@ -75,7 +75,9 @@ class ScrapStorage {
                     .update({
                         scrap: ++(post.data().scrap),
                     })
-                    resolve({success:true});
+
+                    const scrapID = res.id;
+                    resolve({success:true, scrapID});
                 }
             } catch(error){
                 reject(`${err}`)
