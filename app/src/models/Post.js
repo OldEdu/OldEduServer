@@ -146,15 +146,15 @@ class Post {
     }
 
     // 하트/스크랩 클릭 정보
-    // async returnViewHeart(){
-    //     const client = this.body;
-    //     try {
-    //         const response = await PostStorage.returnViewHeart(client);
-    //         return response;
-    //     } catch (err) {
-    //         return { success: false, err };
-    //     }
-    // }
+    async returnViewHeart(){
+        const client = this.body;
+        try {
+            const response = await PostStorage.returnViewHeart(client);
+            return response;
+        } catch (err) {
+            return { success: false, err };
+        }
+    }
 
 }
 
