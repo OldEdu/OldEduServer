@@ -23,11 +23,17 @@ class Scrap {
     // 스크랩에 게시글 추가
     async addScrap() {
         const client = this.body; // scrap JSON
-        try{
-            const response = await ScrapStorage.save(client);
-            return response;
-        }catch(err) {
-            return {success:false,err};
+        const scrapOn = await ScrapStorage.checkScrapOn(client);
+        if(scrapOn === false){
+            try{
+                const response = await ScrapStorage.save(client);
+                return response;
+            }catch(err) {
+                return {success:false,err};
+            }
+        }
+        else{
+            return { success:false, msg:"You have already clicked scrap on this post."}
         }
     }
 

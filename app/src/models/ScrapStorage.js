@@ -48,6 +48,24 @@ class ScrapStorage {
             }
         })
     }
+    // 학습자가 해당 scrap를 클릭 했는지 확인하기 위한
+    static async checkScrapOn(scrapInfo){
+        return new Promise(async (resolve, reject) => {
+            try{
+                const scrapRef = await db.collection("scrap").where("postID", "==", scrapInfo.postID).get();
+                scrapRef.forEach((scrap) => {
+                    // 아래의 조건문에 걸리면 해당 학습자가 해당 게시글에 heart를 누른 것
+                    if(scrap.data().userID === scrapInfo.userID){
+                        resolve(true);
+                    }
+                });
+                // 그대로 루프를 빠져나오면 하트를 클릭 안했다는 것
+                resolve(false);
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
 
     // 게시물 스크랩(저장)
     static async save(scrapInfo) {
