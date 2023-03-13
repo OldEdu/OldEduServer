@@ -127,11 +127,17 @@ class Post {
     // 게시글 하트수 올리기
     async upPostHeart(){
         const client = this.body;
-        try {
-            const response = await PostStorage.updatePostHeart(client);
-            return response;
-        } catch (err) {
-            return { success: false, err };
+        const heartOn = await PostStorage.checkHeartOn(client);
+        if (heartOn === false){
+            try {
+                const response = await PostStorage.updatePostHeart(client);
+                return response;
+            } catch (err) {
+                return { success: false, err };
+            }
+        }
+        else{
+            return { success:false, msg:"You have already clicked heart on this post."}
         }
     }
 

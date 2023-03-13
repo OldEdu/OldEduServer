@@ -248,6 +248,24 @@ class PostStorage {
             }
         })
     }
+    // 학습자가 해당 heart를 클릭 했는지 확인하기 위한
+    static async checkHeartOn(heartInfo){
+        return new Promise(async (resolve, reject) => {
+            try{
+                const heartRef = await db.collection("heart").where("postID", "==", heartInfo.postID).get();
+                heartRef.forEach((heart) => {
+                    // 아래의 조건문에 걸리면 해당 학습자가 해당 게시글에 heart를 누른 것
+                    if(heart.data().userID === heartInfo.userID){
+                        resolve(true);
+                    }
+                });
+                // 그대로 루프를 빠져나오면 하트를 클릭 안했다는 것
+                resolve(false);
+            }catch(err){
+                reject(`${err}`);
+            }
+        })
+    }
     // 게시글,게시글 작성한 교육자 하트수 올리기
     static async updatePostHeart(heartInfo){
         return new Promise(async (resolve, reject) => {
@@ -315,6 +333,7 @@ class PostStorage {
         })
     }
 
+    // 해당 학습자가 해당 게시글에 하트/스크랩 했는지 확인
     static async returnViewHeart(postInfo){
         return new Promise(async(resolve, reject)=>{
             try{
