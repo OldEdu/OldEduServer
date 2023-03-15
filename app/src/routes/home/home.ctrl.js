@@ -124,6 +124,11 @@ const output={
         const response = await comment.getComment_Post();
         return res.json(response);
     },
+    commentListPostLogin:async(req,res)=>{
+        const comment = new Comment();
+        const response = await comment.getComment_Post_Login(req.params.postID,req.params.userID);
+        return res.json(response);
+    },
     commentListUser:async(req,res)=>{
         const comment = new Comment(req.params.userID);
         const response = await comment.getComment_User();
