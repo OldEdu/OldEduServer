@@ -20,6 +20,7 @@ router.get("/searchHeartPosts/:category",ctrl.output.searchHeartPosts);
 router.get("/searchViewsPosts/:category",ctrl.output.searchViewsPosts);
 router.get("/getScrapList/:userID",ctrl.output.getScrapList);
 router.get("/commentListPost/:postID",ctrl.output.commentListPost);
+router.get("/commentListPost/:postID/:userID",ctrl.output.commentListPostLogin);
 router.get("/commentListUser/:userID",ctrl.output.commentListUser);
 router.get("/getComment/:comtID",ctrl.output.getComment);
 router.get("/getEduPhoto/:eduPhotoID",ctrl.output.getEduPhoto);
