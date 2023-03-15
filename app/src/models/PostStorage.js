@@ -299,7 +299,7 @@ class PostStorage {
                     heart:++(teacher.data().heart), //선생님 하트수 1개 증가
                 })
 
-                resolve(response.data()); //하트 수 1증가 된 게시글 리턴
+                resolve({success:true, heartID:heartRef.id}); //하트 수 1증가 된 게시글 리턴
                 
             } catch (err) {
                 reject(`${err}`);
