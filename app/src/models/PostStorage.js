@@ -326,7 +326,7 @@ class PostStorage {
                     })
                 }
                 await db.collection("heart").doc(heartID).delete();
-                resolve({success:true,heartID:null,heartNum:--(post.data().heart)});
+                resolve({success:true,heartID:null,heart:--(post.data().heart)});
             }catch(err){
                 reject(`${err}`);
             }
@@ -359,7 +359,7 @@ class PostStorage {
                     }
                 })
                 // 어떤 조건문(if문)에도 걸리지 않으면 전부 false
-                console.log(hearID,scrapID);
+                console.log(heartID,scrapID);
                 resolve({heartID:null,heartOnClicked:false,scrapID:null,scrapOnClicked:false});
             }catch(err){
                 reject(`${err}`);
