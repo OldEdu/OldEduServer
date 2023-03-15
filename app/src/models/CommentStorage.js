@@ -16,14 +16,70 @@ class CommentStorage {
                 const postRef = db.collection("eduPost").doc(postID);
                 const post = await postRef.get();
                 if(post.data() === undefined){
-                    resolve({sucess:false, msg: "This post does not exist."});
+                    resolve({success:false, msg: "This post does not exist."});
                 }
                 var queryRef = await commentRef.where("postID","==",postID).get();
                 if(queryRef.empty){
                     resolve({success:true , msg: "This post don't have any comment."});
                 }
                 queryRef.forEach(doc=>{
-                    result[idx++]=doc.data();
+                    const commentJson={
+                        postID : doc.data().postID,
+                        userID : doc.data().userID,
+                        userName: doc.data().userName,
+                        comt_content : doc.data().comt_content,
+                        comt_date : doc.data().comt_date,
+                        myComment:false,
+                    };
+                    result[idx++]=commentJson
+                })
+                resolve({success:true, result});
+            }catch(err) {
+                reject(`${err}`);
+            }
+        })
+    }
+
+     // 로그인 했을 경우 postID에 맞는 댓글 리스트 가져오기, userID가 쓴 댓글일 경우에는 true, 안 쓴 댓글 일 경우에는 false를 나타내는 필드 추가
+     static async getCommentList_Post_Login(postID,userID){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                var result = [];
+                var idx = 0;
+                const commentRef = db.collection("comment");
+                const postRef = db.collection("eduPost").doc(postID);
+                const post = await postRef.get();
+                if(post.data() === undefined){
+                    resolve({success:false, msg: "This post does not exist."});
+                }
+                var queryRef = await commentRef.where("postID","==",postID).get();
+                if(queryRef.empty){
+                    resolve({success:true , msg: "This post don't have any comment."});
+                }
+                queryRef.forEach(doc=>{
+                    if(userID==doc.data().userID){
+                        const commentJson={
+                            postID : doc.data().postID,
+                            userID : doc.data().userID,
+                            userName: doc.data().userName,
+                            comt_content : doc.data().comt_content,
+                            comt_date : doc.data().comt_date,
+                            myComment:true,
+                        };
+                        result[idx++]=commentJson 
+                    }  
+                    else{
+                        const commentJson={
+                            postID : doc.data().postID,
+                            userID : doc.data().userID,
+                            userName: doc.data().userName,
+                            comt_content : doc.data().comt_content,
+                            comt_date : doc.data().comt_date,
+                            myComment:false,
+                        };
+                        result[idx++]=commentJson 
+                    }
+                    
                 })
                 resolve({success:true, result});
             }catch(err) {
