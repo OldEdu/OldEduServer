@@ -359,7 +359,7 @@ class PostStorage {
                     }
                 })
                 // 어떤 조건문(if문)에도 걸리지 않으면 전부 false
-                console.log(heartID,scrapID);
+                
                 resolve({heartID:null,heartOnClicked:false,scrapID:null,scrapOnClicked:false});
             }catch(err){
                 reject(`${err}`);
