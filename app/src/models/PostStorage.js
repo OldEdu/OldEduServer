@@ -345,21 +345,22 @@ class PostStorage {
                         scrapRef.forEach((scrap) => {
                             // heart = true, scrap = true
                             if(scrap.data().userID === postInfo.userID){
-                                resolve({heartOnClicked:true,scrapOnClicked:true});
+                                resolve({heartID:heart.data().heartID,heartOnClicked:true,scrapID:scrap.data().scrapID,scrapOnClicked:true});
                             }
                         })
                         //해당 if문 안에는 존재하지만 scrap루프는 빠져나왔으므로 heart = true, scrap = false
-                        resolve({heartOnClicked:true,scrapOnClicked:false});
+                        resolve({heartID:heart.data().heartID,heartOnClicked:true,scrapID:null,scrapOnClicked:false});
                     }
                 });
                 // heart = false인 경우는 루프 탈출이므로
                 scrapRef.forEach((scrap) => {
                     if(scrap.data().userID === postInfo.userID){
-                        resolve({heartOnClicked:false,scrapOnClicked:true});
+                        resolve({heartID:null,heartOnClicked:false,scrapID:scrap.data().scrapID,scrapOnClicked:true});
                     }
                 })
                 // 어떤 조건문(if문)에도 걸리지 않으면 전부 false
-                resolve({heartOnClicked:false,scrapOnClicked:false});
+                console.log(hearID,scrapID);
+                resolve({heartID:null,heartOnClicked:false,scrapID:null,scrapOnClicked:false});
             }catch(err){
                 reject(`${err}`);
             }
