@@ -22,9 +22,38 @@ class CommentStorage {
                 if(queryRef.empty){
                     resolve({success:true , msg: "This post don't have any comment."});
                 }
+                const nowDate = new Date();
                 queryRef.forEach(doc=>{
-                    result[idx++]=doc.data();
-                })
+                    result[idx] = doc.data();
+                    let comtDate = Date.parse(doc.data().comt_date);
+                    let timeDiff = nowDate.getTime() - comtDate;
+                    timeDiff = timeDiff / 1000;
+                    // seconds //
+                    let seconds = Math.floor(timeDiff % 60);
+                    // minutes //
+                    timeDiff = Math.floor(timeDiff / 60);
+                    let minutes = timeDiff % 60;
+                    // hours //
+                    timeDiff = Math.floor(timeDiff / 60);
+                    let hours = timeDiff % 24;
+                    // day//
+                    timeDiff = Math.floor(timeDiff / 24);
+                    let days = timeDiff;
+                    if(days >= 1){
+                        result[idx].term = days+"일 전";
+                    }
+                    else if(hours >= 1){
+                        result[idx].term = hours+"시간 전";
+                    }
+                    else if(minutes >= 1){
+                        result[idx].term = minutes+"분 전";
+                    }
+                    else if(seconds > 0){
+                        result[idx].term = seconds+"초 전";
+                    }
+                    idx++;
+                })  
+                result = recentSort(result); //최신순 정렬
                 resolve({success:true, result});
             }catch(err) {
                 reject(`${err}`);
@@ -64,6 +93,25 @@ class CommentStorage {
             try{
                 const commetRef = db.collection("comment").doc(comtID);
                 const response = await commetRef.get();
+                const nowDate = new Date();
+                const comtDate = Date.parse(response.data().comt_date);
+                let timeDiff = nowDate.getTime() - comtDate;
+                timeDiff = timeDiff / 1000;
+                
+                // seconds //
+                let seconds = Math.floor(timeDiff % 60);
+
+                // minutes //
+                timeDiff = Math.floor(timeDiff / 60);
+                let minutes = timeDiff % 60;
+
+                // hours //
+                timeDiff = Math.floor(timeDiff / 60);
+                let hours = timeDiff % 24;
+
+                // day//
+                timeDiff = Math.floor(timeDiff / 24);
+                let days = timeDiff;
                 resolve(response.data());
             }catch(err){
                 reject(`${err}`);
@@ -158,7 +206,15 @@ class CommentStorage {
             }     
         })
     }
+}
 
+function recentSort(array){
+    array.sort(function (a, b) {
+        if (b.comt_date > a.comt_date) return 1;
+        else if (b.comt_date < a.comt_date) return -1;
+        else return 0;
+    })
+    return array;
 }
 
 module.exports = CommentStorage;
