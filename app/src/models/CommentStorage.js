@@ -16,7 +16,42 @@ class CommentStorage {
                 const postRef = db.collection("eduPost").doc(postID);
                 const post = await postRef.get();
                 if(post.data() === undefined){
-                    resolve({sucess:false, msg: "This post does not exist."});
+                    resolve({success:false, msg: "This post does not exist."});
+                }
+                var queryRef = await commentRef.where("postID","==",postID).get();
+                if(queryRef.empty){
+                    resolve({success:true , msg: "This post don't have any comment."});
+                }
+                queryRef.forEach(doc=>{
+                    const commentJson={
+                        postID : doc.data().postID,
+                        userID : doc.data().userID,
+                        userName: doc.data().userName,
+                        comtID:doc.data().comtID,
+                        comt_content : doc.data().comt_content,
+                        comt_date : doc.data().comt_date,
+                        myComment:false,
+                    };
+                    result[idx++]=commentJson
+                })
+                resolve({success:true, result});
+            }catch(err) {
+                reject(`${err}`);
+            }
+        })
+    }
+
+     // 로그인 했을 경우 postID에 맞는 댓글 리스트 가져오기, userID가 쓴 댓글일 경우에는 true, 안 쓴 댓글 일 경우에는 false를 나타내는 필드 추가
+     static async getCommentList_Post_Login(postID,userID){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                var result = [];
+                var idx = 0;
+                const commentRef = db.collection("comment");
+                const postRef = db.collection("eduPost").doc(postID);
+                const post = await postRef.get();
+                if(post.data() === undefined){
+                    resolve({success:false, msg: "This post does not exist."});
                 }
                 var queryRef = await commentRef.where("postID","==",postID).get();
                 if(queryRef.empty){
@@ -24,36 +59,8 @@ class CommentStorage {
                 }
                 const nowDate = new Date();
                 queryRef.forEach(doc=>{
-                    result[idx] = doc.data();
-                    let comtDate = Date.parse(doc.data().comt_date);
-                    let timeDiff = nowDate.getTime() - comtDate;
-                    timeDiff = timeDiff / 1000;
-                    // seconds //
-                    let seconds = Math.floor(timeDiff % 60);
-                    // minutes //
-                    timeDiff = Math.floor(timeDiff / 60);
-                    let minutes = timeDiff % 60;
-                    // hours //
-                    timeDiff = Math.floor(timeDiff / 60);
-                    let hours = timeDiff % 24;
-                    // day//
-                    timeDiff = Math.floor(timeDiff / 24);
-                    let days = timeDiff;
-                    if(days >= 1){
-                        result[idx].term = days+"일 전";
-                    }
-                    else if(hours >= 1){
-                        result[idx].term = hours+"시간 전";
-                    }
-                    else if(minutes >= 1){
-                        result[idx].term = minutes+"분 전";
-                    }
-                    else if(seconds > 0){
-                        result[idx].term = seconds+"초 전";
-                    }
-                    idx++;
-                })  
-                result = recentSort(result); //최신순 정렬
+                    result[idx++]=doc.data();
+                })
                 resolve({success:true, result});
             }catch(err) {
                 reject(`${err}`);
@@ -194,13 +201,18 @@ class CommentStorage {
                 .update({
                     comtID:res.id,
                 })
+
+                const commentRes= await db.collection("comment").doc(res.id)
                 const postRef = db.collection("eduPost").doc(commentInfo.postID);
                 const post = await postRef.get();
                 await db.collection("eduPost").doc(commentInfo.postID)
                 .update({
                     comment: ++(post.data().comment),
                 })
-                resolve({success:true});
+                const temparray=[]
+                temparray[0]=await (await commentRes.get()).data()
+
+                resolve({success:true, result:temparray});
             }catch(err){
                 reject(`${err}`);
             }     

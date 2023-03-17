@@ -299,7 +299,7 @@ class PostStorage {
                     heart:++(teacher.data().heart), //선생님 하트수 1개 증가
                 })
 
-                resolve({success:true, heartID:heartRef.id}); //하트 수 1증가 된 게시글 리턴
+                resolve({success:true, heartID:heartRef.id,heart:++(post.data().heart)}); //하트 수 1증가 된 게시글 리턴
                 
             } catch (err) {
                 reject(`${err}`);
@@ -326,7 +326,7 @@ class PostStorage {
                     })
                 }
                 await db.collection("heart").doc(heartID).delete();
-                resolve({success:true});
+                resolve({success:true,heartID:null,heart:--(post.data().heart)});
             }catch(err){
                 reject(`${err}`);
             }
@@ -359,7 +359,7 @@ class PostStorage {
                     }
                 })
                 // 어떤 조건문(if문)에도 걸리지 않으면 전부 false
-                console.log(hearID,scrapID);
+                
                 resolve({heartID:null,heartOnClicked:false,scrapID:null,scrapOnClicked:false});
             }catch(err){
                 reject(`${err}`);

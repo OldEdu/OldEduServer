@@ -95,7 +95,7 @@ class ScrapStorage {
                     })
 
                     const scrapID = res.id;
-                    resolve({success:true, scrapID});
+                    resolve({success:true, scrapID:scrapID,scrap:++(post.data().scrap)});
                 }
             } catch(error){
                 reject(`${err}`)
@@ -122,7 +122,7 @@ class ScrapStorage {
                     })
                 }
                 await db.collection("scrap").doc(scrapID).delete();
-                resolve({success:true});
+                resolve({success:true,scrapID:null,scrap:--(post.data().scrap)});
             }catch(err){
                 reject(`${err}`);
             }
