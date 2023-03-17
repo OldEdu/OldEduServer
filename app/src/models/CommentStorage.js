@@ -213,7 +213,10 @@ class CommentStorage {
                 .update({
                     comment: ++(post.data().comment),
                 })
-                resolve({success:true, result:await (await commentRes.get()).data()});
+                const temparray=[]
+                temparray[0]=await (await commentRes.get()).data()
+
+                resolve({success:true, result:temparray});
             }catch(err){
                 reject(`${err}`);
             }     
