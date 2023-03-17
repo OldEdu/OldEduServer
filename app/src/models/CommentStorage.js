@@ -22,18 +22,39 @@ class CommentStorage {
                 if(queryRef.empty){
                     resolve({success:true , msg: "This post don't have any comment."});
                 }
+                const nowDate = new Date();
                 queryRef.forEach(doc=>{
-                    const commentJson={
-                        postID : doc.data().postID,
-                        userID : doc.data().userID,
-                        userName: doc.data().userName,
-                        comtID:doc.data().comtID,
-                        comt_content : doc.data().comt_content,
-                        comt_date : doc.data().comt_date,
-                        myComment:false,
-                    };
-                    result[idx++]=commentJson
+                    result[idx] = doc.data();
+                    let comtDate = Date.parse(doc.data().comt_date);
+                    let timeDiff = nowDate.getTime() - comtDate;
+                    timeDiff = timeDiff / 1000;
+                    // seconds //
+                    let seconds = Math.floor(timeDiff % 60);
+                    // minutes //
+                    timeDiff = Math.floor(timeDiff / 60);
+                    let minutes = timeDiff % 60;
+                    // hours //
+                    timeDiff = Math.floor(timeDiff / 60);
+                    let hours = timeDiff % 24;
+                    // day//
+                    timeDiff = Math.floor(timeDiff / 24);
+                    let days = timeDiff;
+                    if(days >= 1){
+                        result[idx].term = days+"일 전";
+                    }
+                    else if(hours >= 1){
+                        result[idx].term = hours+"시간 전";
+                    }
+                    else if(minutes >= 1){
+                        result[idx].term = minutes+"분 전";
+                    }
+                    else if(seconds > 0){
+                        result[idx].term = seconds+"초 전";
+                    }
+                    result[idx].myComment = false;
+                    idx++;
                 })
+                result = recentSort(result);
                 resolve({success:true, result});
             }catch(err) {
                 reject(`${err}`);
@@ -57,10 +78,44 @@ class CommentStorage {
                 if(queryRef.empty){
                     resolve({success:true , msg: "This post don't have any comment."});
                 }
-                const nowDate = new Date();
                 queryRef.forEach(doc=>{
-                    result[idx++]=doc.data();
+                    result[idx] = doc.data();
+                    let comtDate = Date.parse(doc.data().comt_date);
+                    let timeDiff = nowDate.getTime() - comtDate;
+                    timeDiff = timeDiff / 1000;
+                    // seconds //
+                    let seconds = Math.floor(timeDiff % 60);
+                    // minutes //
+                    timeDiff = Math.floor(timeDiff / 60);
+                    let minutes = timeDiff % 60;
+                    // hours //
+                    timeDiff = Math.floor(timeDiff / 60);
+                    let hours = timeDiff % 24;
+                    // day//
+                    timeDiff = Math.floor(timeDiff / 24);
+                    let days = timeDiff;
+                    if(days >= 1){
+                        result[idx].term = days+"일 전";
+                    }
+                    else if(hours >= 1){
+                        result[idx].term = hours+"시간 전";
+                    }
+                    else if(minutes >= 1){
+                        result[idx].term = minutes+"분 전";
+                    }
+                    else if(seconds > 0){
+                        result[idx].term = seconds+"초 전";
+                    }
+                    // myComment
+                    if(userID == doc.data().userID){
+                        result.myComment = true;
+                    }  
+                    else{
+                        result.myComment = false;
+                    }
+                    idx++;
                 })
+                result = recentSort(result);
                 resolve({success:true, result});
             }catch(err) {
                 reject(`${err}`);
@@ -84,8 +139,37 @@ class CommentStorage {
                 if(queryRef.empty){
                     resolve({success:true , msg: "This user didn't write any comment."});
                 }
+                const nowDate = new Date();
                 queryRef.forEach(doc=>{
-                    result[idx++]=doc.data();
+                    result[idx] = doc.data();
+                    let comtDate = Date.parse(doc.data().comt_date);
+                    let timeDiff = nowDate.getTime() - comtDate;
+                    timeDiff = timeDiff / 1000;
+                    // seconds //
+                    let seconds = Math.floor(timeDiff % 60);
+                    // minutes //
+                    timeDiff = Math.floor(timeDiff / 60);
+                    let minutes = timeDiff % 60;
+                    // hours //
+                    timeDiff = Math.floor(timeDiff / 60);
+                    let hours = timeDiff % 24;
+                    // day//
+                    timeDiff = Math.floor(timeDiff / 24);
+                    let days = timeDiff;
+                    if(days >= 1){
+                        result[idx].term = days+"일 전";
+                    }
+                    else if(hours >= 1){
+                        result[idx].term = hours+"시간 전";
+                    }
+                    else if(minutes >= 1){
+                        result[idx].term = minutes+"분 전";
+                    }
+                    else if(seconds > 0){
+                        result[idx].term = seconds+"초 전";
+                    }
+                    result[idx].myComment = true;
+                    idx++;
                 })
                 resolve({success:true, result});
             }catch(err){
@@ -100,25 +184,6 @@ class CommentStorage {
             try{
                 const commetRef = db.collection("comment").doc(comtID);
                 const response = await commetRef.get();
-                const nowDate = new Date();
-                const comtDate = Date.parse(response.data().comt_date);
-                let timeDiff = nowDate.getTime() - comtDate;
-                timeDiff = timeDiff / 1000;
-                
-                // seconds //
-                let seconds = Math.floor(timeDiff % 60);
-
-                // minutes //
-                timeDiff = Math.floor(timeDiff / 60);
-                let minutes = timeDiff % 60;
-
-                // hours //
-                timeDiff = Math.floor(timeDiff / 60);
-                let hours = timeDiff % 24;
-
-                // day//
-                timeDiff = Math.floor(timeDiff / 24);
-                let days = timeDiff;
                 resolve(response.data());
             }catch(err){
                 reject(`${err}`);
