@@ -205,13 +205,15 @@ class CommentStorage {
                 .update({
                     comtID:res.id,
                 })
+
+                const commentRes= await db.collection("comment").doc(res.id)
                 const postRef = db.collection("eduPost").doc(commentInfo.postID);
                 const post = await postRef.get();
                 await db.collection("eduPost").doc(commentInfo.postID)
                 .update({
                     comment: ++(post.data().comment),
                 })
-                resolve({success:true});
+                resolve({success:true, result:await (await commentRes.get()).data()});
             }catch(err){
                 reject(`${err}`);
             }     
