@@ -71,6 +71,7 @@ class CommentStorage {
                 const commentRef = db.collection("comment");
                 const postRef = db.collection("eduPost").doc(postID);
                 const post = await postRef.get();
+                
                 if(post.data() === undefined){
                     resolve({success:false, msg: "This post does not exist."});
                 }
@@ -78,6 +79,7 @@ class CommentStorage {
                 if(queryRef.empty){
                     resolve({success:true , msg: "This post don't have any comment."});
                 }
+                const nowDate = new Date();
                 queryRef.forEach(doc=>{
                     result[idx] = doc.data();
                     let comtDate = Date.parse(doc.data().comt_date);
