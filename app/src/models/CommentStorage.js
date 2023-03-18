@@ -261,7 +261,9 @@ class CommentStorage {
                     userID : commentInfo.userID,
                     userName: userName,
                     comt_content : commentInfo.comt_content,
-                    comt_date : comt_date
+                    comt_date : comt_date,
+                    myComment:true,
+                    term:"방금전"
                 };
                 const res = await db.collection("comment").add(commentJson);
                 await db.collection("comment").doc(res.id)
