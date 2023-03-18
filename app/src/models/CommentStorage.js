@@ -110,10 +110,10 @@ class CommentStorage {
                     }
                     // myComment
                     if(userID == doc.data().userID){
-                        result.myComment = true;
+                        result[idx].myComment = true;
                     }  
                     else{
-                        result.myComment = false;
+                        result[idx].myComment = false;
                     }
                     idx++;
                 })
