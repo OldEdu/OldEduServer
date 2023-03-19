@@ -22,6 +22,7 @@ class ScrapStorage {
     static async getUserScrap(userID) {
         return new Promise(async(resolve,reject) => {
             try{
+                var posts = [];
                 var result = [];
                 var idx = 0;
                 const scrapRef = db.collection("scrap");
@@ -29,19 +30,25 @@ class ScrapStorage {
                 const thisUserRef = db.collection("users").doc(userID);
                 const user = await thisUserRef.get();
                 const userQuery = await userRef.where('userID',"in",[userID]).get();
+                // user의 정보가 없는 경우
                 if(userQuery.empty){
                     resolve({success:false, msg:"Sorry, but we can't find information of this ID."});
                 }
+                // userType이 students가 아닌 경우
                 if(user.data().userType === false){
                     resolve({success:false, msg:"You are not Student. So, You can't get Scrap List."});
                 }
+                // 해당 userID의 유저가 어떤 게시글도 스크랩 하지 않은 경우
                 var queryRef = await scrapRef.where("userID","==",userID).get();
                 if(queryRef.empty){
                     resolve({success:true, msg: "You don't have any scrap."}); 
                 }
                 queryRef.forEach(doc=>{
-                    result[idx++]=doc.data();
+                    posts[idx++] = doc.data().postID;
                 })
+                for(let i = 0; i < idx; i++){
+                    result[i] = (await db.collection("eduPost").doc(posts[i]).get()).data();
+                }
                 resolve({success:true, result});
             }catch(err) {
                 reject(`${err}`)
