@@ -214,6 +214,20 @@ class CommentStorage {
     static async deleteComment(comtID){
         return new Promise(async(resolve,reject)=>{
             try{
+                const commentRef = db.collection("scrap").doc(scrapID);
+                const comment = await commentRef.get();
+
+                const postID = comment.data().postID;
+                const postRef = db.collection("eduPost").doc(postID);
+                const post = await postRef.get();
+                const commentCount = post.data().scrap;
+                // eduPost의 scrap이 0 이하인 경우에는 -1을하지 못하도록 함
+                if (commentCount > 0) {
+                    await db.collection("eduPost").doc(postID)
+                    .update({
+                        comment: --(post.data().comment),
+                    })
+                }
                 await db.collection("comment").doc(comtID).delete();
                 resolve({success:true});
             }catch(err){
