@@ -46,8 +46,15 @@ class ScrapStorage {
                 queryRef.forEach(doc=>{
                     posts[idx++] = doc.data().postID;
                 })
+                let post;
+                let arrayIdx = 0;
                 for(let i = 0; i < idx; i++){
-                    result[i] = (await db.collection("eduPost").doc(posts[i]).get()).data();
+                    post = (await db.collection("eduPost").doc(posts[i]).get()).data();
+                    console.log(post);
+                    if(post !== undefined){
+                        result[arrayIdx] = post;
+                        arrayIdx++;
+                    }
                 }
                 resolve({success:true, result});
             }catch(err) {
