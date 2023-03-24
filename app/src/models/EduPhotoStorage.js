@@ -61,7 +61,7 @@ class EduPhotoStorage{
                 var queryRef =await eduPhotoRef.where("postID","==",postID).get();
             
                  if(queryRef.empty){
-                    resolve({success:true , msg: "생성되지 않은 postID입니다."}); 
+                    resolve({success:true , msg: "Image added to post does not exist."}); 
                 }
                 queryRef.forEach(doc=>{
                     result[residx++]=doc.data();
