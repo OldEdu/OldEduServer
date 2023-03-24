@@ -20,7 +20,7 @@ class CommentStorage {
                 }
                 var queryRef = await commentRef.where("postID","==",postID).get();
                 if(queryRef.empty){
-                    resolve({success:true , msg: "This post don't have any comment."});
+                    resolve({success:true , msg: "This post don't have any comment. \nPlease leave your first comment :)"});
                 }
                 const nowDate = new Date();
                 queryRef.forEach(doc=>{
@@ -77,7 +77,7 @@ class CommentStorage {
                 }
                 var queryRef = await commentRef.where("postID","==",postID).get();
                 if(queryRef.empty){
-                    resolve({success:true , msg: "This post don't have any comment."});
+                    resolve({success:true , msg: "This post don't have any comment. \nPlease leave your first comment :)"});
                 }
                 const nowDate = new Date();
                 queryRef.forEach(doc=>{
