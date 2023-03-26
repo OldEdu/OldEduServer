@@ -2,6 +2,16 @@
 
 const { resolve } = require("path");
 const db = require("../config/db");
+
+const {default: algoliasearch} = require("algoliasearch");
+const client = algoliasearch(
+    "PLWCCK93VC",
+    "08de95a65adc4cc640393ce326e39f1a", algoliasearch,
+);
+
+const index = client.initIndex('edupost_search')
+
+
 //PostStorage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 class PostStorage {
 
@@ -187,6 +197,15 @@ class PostStorage {
     static async getSearchRecentPosts(categoryName, keyword) { //검색 키워드가 매게변수이다.
         return new Promise(async (resolve, reject) => {
             try {
+                var idx=0
+                const algoliasearch=[]
+                await index
+                .search(keyword)
+                .then(({hits})=>{
+                console.log(hits)
+                console.log(hits[idx++])
+                algoliasearch[idx++]=hits[idx++]});
+                
                 let result =await getSearchPosts(categoryName,keyword);
                 
                 if (result.length==0) {
