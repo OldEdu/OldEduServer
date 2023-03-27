@@ -197,22 +197,31 @@ class PostStorage {
     static async getSearchRecentPosts(categoryName, keyword) { //검색 키워드가 매게변수이다.
         return new Promise(async (resolve, reject) => {
             try {
-                var idx=0
-                const algoliasearch=[]
+        
+                let algoliasearch=[]
+                let result=[]
+                let idx=0
+               
+                //algolia 검색
                 await index
                 .search(keyword)
                 .then(({hits})=>{
-                console.log(hits)
-                console.log(hits[idx++])
-                algoliasearch[idx++]=hits[idx++]});
+                algoliasearch = hits});
+
+                //algolia에서 가져온 검색결과의 objectID를 fireStorage에서 postID로 찾음
+                var postRef = await db.collection("eduPost");
                 
-                let result =await getSearchPosts(categoryName,keyword);
-                
-                if (result.length==0) {
-                    resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
+                for (const searchRes of algoliasearch) {
+                    if(searchRes.category == categoryName){
+                        var eduPostRef = postRef.doc(searchRes.objectID);
+                        var eduPost= (await eduPostRef.get())
+                        result[idx++]= await eduPost.data()
+                    }
                 }
 
-                result=recentSort(result); //최신순 정렬
+                if (result.length==0) {
+                    resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
+                }                
 
                 resolve({ success: true, result });
             } catch (err) {
@@ -396,20 +405,14 @@ function recentSort(array){
     return array;
 }
 
-async function getSearchPosts(categoryName, keyword) {
-    var result = [];
-    var residx = 0;
+async function getSearchPosts(objectID) {
 
-    var residx = 0;
     var postRef = db.collection("eduPost");
-    var categoryRef = postRef.where("category", "==", categoryName);
-
-    var searchRef = await categoryRef.orderBy("title").startAt(keyword).endAt(keyword + '\uf8ff').get();
-
-    searchRef.forEach(doc => {  //데이터 갖고오기   
-        result[residx++] = doc.data();
-    })
-    return result;
+    var eduPostRef = postRef.doc(objectID);
+    var eduPost= (await eduPostRef.get())
+    
+    console.log(eduPost.data())
+    return eduPost.data();
 }
 async function getPosts(categoryName) {
     var result = [];
