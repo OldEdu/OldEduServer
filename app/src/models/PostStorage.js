@@ -2,6 +2,16 @@
 
 const { resolve } = require("path");
 const db = require("../config/db");
+
+const {default: algoliasearch} = require("algoliasearch");
+const client = algoliasearch(
+    "PLWCCK93VC",
+    "08de95a65adc4cc640393ce326e39f1a", algoliasearch,
+);
+
+const index = client.initIndex('edupost_search')
+
+
 //PostStorage에서는 DB를 CRUD(생성,읽기,수정,삭제)역할
 class PostStorage {
 
@@ -187,13 +197,31 @@ class PostStorage {
     static async getSearchRecentPosts(categoryName, keyword) { //검색 키워드가 매게변수이다.
         return new Promise(async (resolve, reject) => {
             try {
-                let result =await getSearchPosts(categoryName,keyword);
-                
-                if (result.length==0) {
-                    resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
+        
+                let algoliasearch=[]
+                let result=[]
+                let idx=0
+               
+                //algolia 검색
+                await index
+                .search(keyword)
+                .then(({hits})=>{
+                algoliasearch = hits});
+
+                //algolia에서 가져온 검색결과의 objectID를 fireStorage에서 postID로 찾음
+                var postRef = await db.collection("eduPost");
+
+                for (const searchRes of algoliasearch) {
+                    if(searchRes.category == categoryName){
+                        var eduPostRef = postRef.doc(searchRes.objectID);
+                        var eduPost= (await eduPostRef.get())
+                        result[idx++]= await eduPost.data()
+                    }
                 }
 
-                result=recentSort(result); //최신순 정렬
+                if (result.length==0) {
+                    resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
+                }                
 
                 resolve({ success: true, result });
             } catch (err) {
@@ -205,7 +233,26 @@ class PostStorage {
     static async getSearchHeartPosts(categoryName, keyword) { //검색 키워드가 매게변수이다.
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await getSearchPosts(categoryName,keyword);
+                let algoliasearch=[]
+                let result=[]
+                let idx=0
+               
+                //algolia 검색
+                await index
+                .search(keyword)
+                .then(({hits})=>{
+                algoliasearch = hits});
+
+                //algolia에서 가져온 검색결과의 objectID를 fireStorage에서 postID로 찾음
+                var postRef = await db.collection("eduPost");
+                
+                for (const searchRes of algoliasearch) {
+                    if(searchRes.category == categoryName){
+                        var eduPostRef = postRef.doc(searchRes.objectID);
+                        var eduPost= (await eduPostRef.get())
+                        result[idx++]= await eduPost.data()
+                    }
+                }
 
                 if (result.length==0) {
                     resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
@@ -229,7 +276,27 @@ class PostStorage {
         return new Promise(async (resolve, reject) => {
             try {
 
-                let result = await getSearchPosts(categoryName,keyword);
+                let algoliasearch=[]
+                let result=[]
+                let idx=0
+               
+                //algolia 검색
+                await index
+                .search(keyword)
+                .then(({hits})=>{
+                algoliasearch = hits});
+
+                //algolia에서 가져온 검색결과의 objectID를 fireStorage에서 postID로 찾음
+                var postRef = await db.collection("eduPost");
+                
+                for (const searchRes of algoliasearch) {
+                    if(searchRes.category == categoryName){
+                        var eduPostRef = postRef.doc(searchRes.objectID);
+                        var eduPost= (await eduPostRef.get())
+                        result[idx++]= await eduPost.data()
+                    }
+                }
+
 
                 if (result.length==0) {
                     resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
@@ -377,21 +444,7 @@ function recentSort(array){
     return array;
 }
 
-async function getSearchPosts(categoryName, keyword) {
-    var result = [];
-    var residx = 0;
 
-    var residx = 0;
-    var postRef = db.collection("eduPost");
-    var categoryRef = postRef.where("category", "==", categoryName);
-
-    var searchRef = await categoryRef.orderBy("title").startAt(keyword).endAt(keyword + '\uf8ff').get();
-
-    searchRef.forEach(doc => {  //데이터 갖고오기   
-        result[residx++] = doc.data();
-    })
-    return result;
-}
 async function getPosts(categoryName) {
     var result = [];
     var residx = 0;
