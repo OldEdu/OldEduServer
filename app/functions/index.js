@@ -44,7 +44,7 @@ exports.sendCollectionToAlgolia = functions
 // define functions:collectionOnCreate
 exports.collectionOnCreate = functions
     .region("us-central1")
-    .firestore.document("Record/{recordId}")
+    .firestore.document("eduPost/{postID}")
     .onCreate(async (snapshot, context) => {
       await saveDocumentInAlgolia(snapshot);
     });
@@ -67,9 +67,9 @@ const saveDocumentInAlgolia = async (snapshot) => {
 // define functions:ticcleOnUpdate
 exports.ticcleOnUpdate = functions
     .region("us-central1")
-    .firestore.document("Record/{recordId}")
+    .firestore.document("eduPost/{postID}")
     .onUpdate(async (change, context) => {
-      await updateDocumentInAlgolia(context.params.recordId, change);
+      await updateDocumentInAlgolia(context.params.postID, change);
     });
 
 
@@ -98,7 +98,7 @@ const updateDocumentInAlgolia = async (objectID, change) => {
 // define functions:ticcleOnDelete
 exports.ticcleOnDelete = functions
     .region("us-central1")
-    .firestore.document("Record/{recordId}")
+    .firestore.document("eduPost/{postID}")
     .onDelete(async (snapshot, context) => {
       await deleteDocumentInAlgolia(snapshot);
     });
