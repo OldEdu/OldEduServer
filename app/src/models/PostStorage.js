@@ -210,7 +210,7 @@ class PostStorage {
 
                 //algolia에서 가져온 검색결과의 objectID를 fireStorage에서 postID로 찾음
                 var postRef = await db.collection("eduPost");
-                
+
                 for (const searchRes of algoliasearch) {
                     if(searchRes.category == categoryName){
                         var eduPostRef = postRef.doc(searchRes.objectID);
@@ -233,7 +233,26 @@ class PostStorage {
     static async getSearchHeartPosts(categoryName, keyword) { //검색 키워드가 매게변수이다.
         return new Promise(async (resolve, reject) => {
             try {
-                let result = await getSearchPosts(categoryName,keyword);
+                let algoliasearch=[]
+                let result=[]
+                let idx=0
+               
+                //algolia 검색
+                await index
+                .search(keyword)
+                .then(({hits})=>{
+                algoliasearch = hits});
+
+                //algolia에서 가져온 검색결과의 objectID를 fireStorage에서 postID로 찾음
+                var postRef = await db.collection("eduPost");
+                
+                for (const searchRes of algoliasearch) {
+                    if(searchRes.category == categoryName){
+                        var eduPostRef = postRef.doc(searchRes.objectID);
+                        var eduPost= (await eduPostRef.get())
+                        result[idx++]= await eduPost.data()
+                    }
+                }
 
                 if (result.length==0) {
                     resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
@@ -257,7 +276,27 @@ class PostStorage {
         return new Promise(async (resolve, reject) => {
             try {
 
-                let result = await getSearchPosts(categoryName,keyword);
+                let algoliasearch=[]
+                let result=[]
+                let idx=0
+               
+                //algolia 검색
+                await index
+                .search(keyword)
+                .then(({hits})=>{
+                algoliasearch = hits});
+
+                //algolia에서 가져온 검색결과의 objectID를 fireStorage에서 postID로 찾음
+                var postRef = await db.collection("eduPost");
+                
+                for (const searchRes of algoliasearch) {
+                    if(searchRes.category == categoryName){
+                        var eduPostRef = postRef.doc(searchRes.objectID);
+                        var eduPost= (await eduPostRef.get())
+                        result[idx++]= await eduPost.data()
+                    }
+                }
+
 
                 if (result.length==0) {
                     resolve({ success: true, msg: `${keyword}와(과) 일치하는 검색결과가 없습니다.` }); //검색된 게시물이 없습니다.
@@ -405,15 +444,7 @@ function recentSort(array){
     return array;
 }
 
-async function getSearchPosts(objectID) {
 
-    var postRef = db.collection("eduPost");
-    var eduPostRef = postRef.doc(objectID);
-    var eduPost= (await eduPostRef.get())
-    
-    console.log(eduPost.data())
-    return eduPost.data();
-}
 async function getPosts(categoryName) {
     var result = [];
     var residx = 0;
